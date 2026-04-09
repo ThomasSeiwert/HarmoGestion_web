@@ -4,12 +4,13 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Ajouter CSS-->
-    <!-- Ajouter Bootstrap-->
+    <link rel="stylesheet" href="../static/node_modules/bootstrap/dist/css/bootstrap.min.css" data-th-href="@{/node_modules/bootstrap/dist/css/bootstrap.min.css}">
+    <link rel="stylesheet" href="../static/style.css" data-th-href="@{/style.css}">
     <title>Index</title>
   </head>
   <body>
-    <h1>Liste des membres</h1>
+    <h1 th:text="#{titre.accueil}"></h1>
+    <h2>Liste des membres</h2>
     <table>
       <thead>
       <tr>
@@ -20,14 +21,17 @@
       </thead>
       <tbody>
         <tr th:if="${#lists.isEmpty(listeMembres)}">
-          <td colspan="3">Aucune donnée n'est disponible</td>
+          <td colspan="3" th:text="#{donnee.absente}"></td>
         </tr>
         <tr th:each="membre : ${listeMembres}">
-          <td th:text="${membre.nomMembre}">Nom</td>
-          <td th:text="${membre.prenomMembre}">Prénom</td>
-          <td th:text="${membre.dateInscriptionMembre}">Date</td>
+          <td th:text="${membre?.nomMembre}">Nom</td>
+          <td th:text="${membre?.prenomMembre}">Prénom</td>
+          <td th:text="${membre?.dateInscriptionMembre}">Date</td>
         </tr>
       </tbody>
     </table>
+
+    <!-- Script-->
+    <script src="../static/node_modules/bootstrap/dist/js/bootstrap.bundle.js" data-th-href="@{/node_modules/bootstrap/dist/js/bootstrap.bundle.js}" defer></script>
   </body>
 </html>
