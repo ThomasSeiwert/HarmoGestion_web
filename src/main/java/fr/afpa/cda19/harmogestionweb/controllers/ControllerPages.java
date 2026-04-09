@@ -8,9 +8,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 @Controller
-public class ControllerIndex {
+public class ControllerPages {
     @GetMapping("/index")
-    public static String pageIndex(Model model) {
+    public String pageIndex(Model model) {
         //Jeu d'essai
         ArrayList<Membre> listeMembres = new ArrayList<>();
         listeMembres.add(new Membre(1, "Brucker", "Rodolphe", LocalDate.of(2012, 4, 12)));
@@ -21,5 +21,10 @@ public class ControllerIndex {
         //Affichage
         model.addAttribute("listeMembres", listeMembres);
         return "index";
+    }
+
+    @GetMapping("/autrePageTest")
+    public String pageAutreTest(Model model) {
+        return "autrePageTest";
     }
 }
