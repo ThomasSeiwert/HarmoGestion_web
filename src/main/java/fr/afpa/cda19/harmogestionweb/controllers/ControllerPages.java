@@ -17,7 +17,7 @@ public class ControllerPages {
         listeMembres.add(new Membre(2, "Didier", "Cédric", LocalDate.of(2013, 8, 26)));
         listeMembres.add(new Membre(3, "Seiwert", "Thomas", LocalDate.of(2013, 11, 2)));
         listeMembres.add(new Membre(4, "Ugolini", "Cyril", LocalDate.of(2014, 7, 4)));
-        listeMembres.add(new Membre(5, "Turbo", "Josianne", LocalDate.now()));
+        //listeMembres.add(new Membre(5, "Turbo", "Josianne", LocalDate.now()));
         //Affichage
         model.addAttribute("listeMembres", listeMembres);
         return "index";

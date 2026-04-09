@@ -2,3 +2,12 @@ h1 {
   font-weight: bold;
   color: aquamarine;
 }
+
+.header {
+  background-color: black;
+  padding: 0.5em;
+  margin-bottom: 0.5em;
+  a {
+    color: azure;
+  }
+}
