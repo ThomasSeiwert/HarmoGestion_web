@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="Fr-fr" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/node_modules/bootstrap/dist/css/bootstrap.min.css" data-th-href="@{/node_modules/bootstrap/dist/css/bootstrap.min.css}">
+    <link rel="stylesheet" href="../static/style.css" data-th-href="@{/style.css}">
+    <title>Mentions légales</title>
+  </head>
+  <body>
+    <div th:replace="fragments/header :: header"></div>
+
+    <h1 th:text="#{titre.titrePrerempli}"></h1>
+
+    <div th:replace="fragments/footer :: footer"></div>
+  </body>
+</html>
