@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-  <div th:fragment="header">
-    <header class="header">
-      <img alt="Logo" th:src="@{/img/LogoComplet_Blanc.png}"/>
-      <nav>
-        <a th:href="@{/index}">Accueil</a> |
-        <a th:href="@{/autrePageTest}">Autre page de test</a>
-      </nav>
-    </header>
-  </div>
+  <header class="header" th:fragment="header">
+    <img alt="Logo" th:src="@{/img/LogoComplet_Blanc.png}"/>
+    <nav>
+      <a th:href="@{/index}">Accueil</a> |
+      <a th:href="@{/autrePageTest}">Autre page de test</a>
+    </nav>
+  </header>
 </html>

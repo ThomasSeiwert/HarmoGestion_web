@@ -1,13 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-  <div th:fragment="footer">
-    <script src="../static/node_modules/bootstrap/dist/js/bootstrap.bundle.js" data-th-href="@{/node_modules/bootstrap/dist/js/bootstrap.bundle.js}" defer></script>
-    <!-- Footer-->
-    <footer class="header">
-      <nav>
-        <a th:href="@{/index}">Accueil</a> |
-        <a th:href="@{/autrePageTest}">Autre page de test</a>
-      </nav>
-    </footer>
-  </div>
+  <footer class="header" th:fragment="footer">
+    <nav>
+      <a th:href="@{/index}">Accueil</a> |
+      <a th:href="@{/autrePageTest}">Autre page de test</a>
+    </nav>
+  </footer>
 </html>
