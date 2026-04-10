@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="fr-FR" xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="fragments/head :: head">
+    <title th:text="${titrePage}">HarmoGestion : Titre page</title>
+  </head>
+  <body>
+    <header th:replace="fragments/header :: header"></header>
+    <main class="container">
+      <h1 th:text="${titreFormulaire}">Ajouter</h1>
+      <form action="#" th:action="${action}" th:object="${instrument}" id="form-instrument" th:method="${method}">
+        <div class="mb-3">
+          <label class="form-label" for="nom-instrument">Nom de l'instrument</label>
+          <input class="form-control" th:errorclass="is-invalid" id="nom-instrument" th:field="*{libelleInstrument}" required
+                 type="text" minlength="3" maxlength="50">
+          <div class="invalid-feedback" th:errors="*{libelleInstrument}"></div>
+        </div>
+        <input type="hidden" th:field="*{idInstrument}">
+        <div>
+          <button type="submit" th:text="${nomAction}">Enregistrer</button>
+        </div>
+      </form>
+    </main>
+    <footer th:replace="fragments/footer :: footer"></footer>
+    <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
+  </body>
+</html>
