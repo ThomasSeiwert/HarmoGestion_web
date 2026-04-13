@@ -12,17 +12,17 @@
       <!-- Titre principal -->
       <h1>Prochains cours</h1>
       <!-- Prochains cours -->
-      <article class="row">
-        <section th:each="cours : ${prochainsCours}" class="col">
-          <div class="card align-items-center" style="min-width: 24rem; max-width: 28rem">
-            <img th:src="@{/img/clock.svg}" alt="Horloge" id="clock" class="card-img-top" style="max-width: 8rem">
+      <article class="row row-card">
+        <section th:each="cours : ${prochainsCours}" class="col col-card">
+          <div class="card">
+            <img th:src="@{/img/clock.svg}" alt="Horloge" id="clock" class="card-img-top">
             <div class="card-body">
               <h2 th:text="'Cours de ' + ${cours.instrument.libelleInstrument}">Cours</h2>
               <h3 th:text="'Date: ' + ${#temporals.format(cours.dateCours, 'dd/MM/yyyy - HH:mm')}">Date</h3>
               <h3 th:text="'Durée: ' + ${cours.dureeCours} + 'min'">Durée</h3>
-              <h4 th:text="'Enseignant: ' + ${cours.enseignant.prenomMembre} + ' '
-               + ${cours.enseignant.nomMembre}">Enseignant</h4>
-              <h4 th:text="'Participants: ' + ${cours.participants.size()}">Participants</h4>
+              <h3 th:text="'Enseignant: ' + ${cours.enseignant.prenomMembre} + ' '
+               + ${cours.enseignant.nomMembre}">Enseignant</h3>
+              <h3 th:text="'Participants: ' + ${cours.participants.size()}">Participants</h3>
               <ul>
                 <th:block th:each="participant : ${cours.participants}">
                   <li th:text="${participant.prenomMembre} + ' ' + ${participant.nomMembre}">Participant</li>
