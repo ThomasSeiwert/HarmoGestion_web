@@ -6,6 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" data-th-href="@{/node_modules/bootstrap/dist/css/bootstrap.min.css}">
     <link rel="stylesheet" data-th-href="@{/style.css}">
-    <title th:text="${titrePage}">HarmoGestion : Titre page</title>
+    <title th:text="#{titre.titrePrerempli}+' '+${titrePage}">HarmoGestion : Titre page</title>
   </head>
 </html>
