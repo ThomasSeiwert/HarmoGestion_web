@@ -6,7 +6,26 @@
   <body>
     <header th:replace="fragments/header :: header"></header>
     <main class="container">
-      <h1 th:text="#{titre.titrePrerempli}">Titre</h1>
+      <h1 th:text="#{titre.listeMembres}"></h1>
+      <table>
+        <thead>
+        <tr>
+          <th th:text="#{membre.nom}">Nom</th>
+          <th th:text="#{membre.prenom}"></th>
+          <th th:text="#{membre.date}"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${#lists.isEmpty(listeMembres)}">
+          <td colspan="3" th:text="#{donnee.absente}"></td>
+        </tr>
+        <tr th:each="membreActif : ${listeMembres}">
+          <td th:text="${membreActif?.nomMembre}">Nom</td>
+          <td th:text="${membreActif?.prenomMembre}">Prénom</td>
+          <td th:text="${membreActif?.dateInscriptionMembre}">Date</td>
+        </tr>
+        </tbody>
+      </table>
     </main>
     <footer th:replace="fragments/footer :: footer"></footer>
     <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>

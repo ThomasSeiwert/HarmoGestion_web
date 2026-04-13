@@ -1,10 +1,51 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
   <header class="header" th:fragment="header">
-    <img alt="Logo" th:src="@{/img/LogoComplet_Blanc.png}"/>
-    <nav>
-      <a th:href="@{/index}">Accueil</a> |
-      <a th:href="@{/autrePageTest}">Autre page de test</a>
+    <nav class="navbar navbar-expand-lg navbar-ecf">
+      <section class="container-fluid">
+        <a th:href="@{/index}"><img alt="Logo" width="25%" height="25%" th:src="@{/img/LogoSimplifie_Blanc.png}"/></a>
+        <button class="navbar-toggler burger-ecf" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <!-- Membres-->
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" th:text="#{titre.membres}"></a>
+              <ul class="dropdown-menu burger-ecf">
+                <a class="nav-link" th:href="@{/listeMembres}" th:text="#{titre.listeMembres}"></a>
+                <a class="nav-link" th:href="@{/ficheMembre}" th:text="#{titre.ficheMembre}"></a>
+                <a class="nav-link" th:href="@{/inscriptionMembre}" th:text="#{titre.inscriptionMembre}"></a>
+              </ul>
+            </li>
+            <!-- Cours-->
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" th:text="#{titre.cours}"></a>
+              <ul class="dropdown-menu burger-ecf">
+                <a class="nav-link" th:href="@{/planifierCours}" th:text="#{titre.planifierCours}"></a>
+                <a class="nav-link" th:href="@{/prochainsCours}" th:text="#{titre.prochainsCours}"></a>
+              </ul>
+            </li>
+            <!-- Représentation-->
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" th:text="#{titre.representations}">
+              </a>
+              <ul class="dropdown-menu burger-ecf">
+                <a class="nav-link" th:href="@{/planifierRepresentation}" th:text="#{titre.planifierRepresentation}"></a>
+                <a class="nav-link" th:href="@{/prochainesRepresentations}" th:text="#{titre.prochainesRepresentations}"></a>
+              </ul>
+            </li>
+            <!-- Instrument-->
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" th:text="#{titre.instruments}">
+              </a>
+              <ul class="dropdown-menu burger-ecf">
+                <a class="nav-link" th:href="@{/ajouterInstrument}" th:text="#{titre.ajouterInstrument}"></a>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </section>
     </nav>
   </header>
 </html>

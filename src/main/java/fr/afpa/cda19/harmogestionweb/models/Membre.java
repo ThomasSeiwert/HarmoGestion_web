@@ -1,54 +1,52 @@
 package fr.afpa.cda19.harmogestionweb.models;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
+/**
+ * Classe représentant un membre.
+ *
+ * @author Rodolphe BRUCKER
+ * @version 1.0.0
+ * @since 10/04/2026
+ */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Membre {
-    //==== Variables ====
+    /**
+     * Identifiant du membre.
+     */
     private Integer idMembre;
+
+    /**
+     * Nom du membre.
+     */
+    @NotBlank(message = "Un membre doit avoir un nom.")
+    @Size(min = 3, max = 30,
+          message = "Le nom du membre doit faire entre trois "
+                    + "et cinquante caractères de long")
     private String nomMembre;
+
+    /**
+     * Prénom du membre.
+     */
+    @NotBlank(message = "Un membre doit avoir un prénom.")
+    @Size(min = 3, max = 30,
+          message = "Le prénom du membre doit faire entre trois "
+                    + "et trente caractères de long.")
     private String prenomMembre;
+
+    /**
+     * Date d'inscription du membre.
+     */
+    @NotNull(message = "Un membre doit avoir une date d'inscription.")
+    @PastOrPresent(message = "Une date d'inscription ne peut pas être future.")
     private LocalDate dateInscriptionMembre;
-
-    public Integer getIdMembre() {
-        return idMembre;
-    }
-
-    public void setIdMembre(final Integer idMembre) {
-        this.idMembre = idMembre;
-    }
-
-    public String getNomMembre() {
-        return nomMembre;
-    }
-
-    public void setNomMembre(final String nomMembre) {
-        this.nomMembre = nomMembre;
-    }
-
-    public String getPrenomMembre() {
-        return prenomMembre;
-    }
-
-    public void setPrenomMembre(final String prenomMembre) {
-        this.prenomMembre = prenomMembre;
-    }
-
-    public LocalDate getDateInscriptionMembre() {
-        return dateInscriptionMembre;
-    }
-
-    public void setDateInscriptionMembre(
-            final LocalDate dateInscriptionMembre) {
-        this.dateInscriptionMembre = dateInscriptionMembre;
-    }
-
-    //==== Constructeurs ====
-    public Membre(final Integer idMembre, final String nomMembre,
-                  final String prenomMembre,
-                  final LocalDate dateInscriptionMembre) {
-        this.idMembre = idMembre;
-        this.nomMembre = nomMembre;
-        this.prenomMembre = prenomMembre;
-        this.dateInscriptionMembre = dateInscriptionMembre;
-    }
 }
