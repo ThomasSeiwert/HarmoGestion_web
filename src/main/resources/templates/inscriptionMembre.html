@@ -6,7 +6,28 @@
   <body>
     <header th:replace="fragments/header :: header"></header>
     <main class="container">
-      <h1 th:text="#{titre.titrePrerempli}">Titre</h1>
+      <h1 th:text="#{titre.inscriptionMembre}">Titre</h1>
+      <section class="formulaire">
+        <form method="post">
+          <!-- Nom-->
+          <label for="nom" th:text="#{membre.nom}"></label><br>
+          <input type="text" id="nom" name="membre-nom" placeholder="Volga"><br>
+          <span id="erreur-nom" class="message-erreur"></span>
+          <br>
+          <!-- Prénom-->
+          <label for="prenom" th:text="#{membre.prenom}"></label><br>
+          <input type="text" id="prenom" name="membre-prenom" placeholder="Alexy"><br>
+          <span id="erreur-prenom" class="message-erreur"></span>
+          <br>
+          <!-- Prénom-->
+          <label for="date" th:text="#{membre.date}"></label><br>
+          <input type="date" id="date" name="membre-date"><br>
+          <span id="erreur-date" class="message-erreur"></span>
+          <br>
+          <!-- Validation-->
+          <input type="submit" class="btn btn-primary btn-lg" th:value="#{membre.soumettre}">
+        </form>
+      </section>
     </main>
     <footer th:replace="fragments/footer :: footer"></footer>
     <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
