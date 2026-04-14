@@ -4,15 +4,15 @@
 :root {
   --bg-color: #f5f7fa;
   --text-color: #333;
-  --primary-gradient: color-mix(in srgb, #8fe9ff 75%, #003366);/*linear-gradient(135deg, #8fe9ff, #003366);*/
-  --primary-dark: #003244;
+  --primary: color-mix(in srgb, #a7e1fd 82%, #003246);
+  --primary-dark: #003246;
   --primary-hover: #001a22;
   --accent-color: #5bb8cc;
   --link-color: #0055a5;
   --row-even: #f0f4f8;
   --row-hover: #dce9f7;
   --border-light: #e6e6e6;
-  --error-color: #d81515;
+  --error-color: #ab0e02;
 }
 
 /* ===========================
@@ -54,7 +54,7 @@ h1, h2 {
 
 h1 {
   font-size: 1.8em;
-  color: #003366;
+  color: var(--primary-dark);
 }
 
 h2 {
@@ -89,7 +89,7 @@ label {
    HEADER & FOOTER (Styles communs)
    =========================== */
 header, .header, footer, .footer {
-  background: var(--primary-gradient);
+  background: var(--primary);
   color: var(--primary-dark);
   text-align: center;
 }
@@ -127,7 +127,7 @@ header a:hover, .header a:hover, footer a:hover, .footer a:hover {
 }
 
 .header-nav {
-  background: var(--primary-gradient);
+  background: var(--primary);
   padding: 0.25em 0.75em;
   border-radius: 0.5em;
   display: flex;
@@ -158,6 +158,80 @@ footer, .footer {
 /* ===========================
    TABLEAU ET FORMULAIRE
    =========================== */
+.btn-submit{
+  border-color: var(--primary-dark);
+  background-color: var(--primary);
+  color: var(--primary-dark);
+}
+
+.btn-submit:hover{
+  background-color: var(--primary-dark);
+  color: var(--primary);
+}
+
+#liste-instruments .btn{
+  text-decoration: none;
+}
+
+.btn.primary {
+  color: var(--primary-dark);
+  background-color: var(--bg-color);
+  border-color: var(--primary-dark);
+}
+
+.btn.primary:hover {
+  color: var(--bg-color);
+  background-color: var(--primary-dark);
+}
+
+.btn.plain-primary {
+  border-color: var(--primary-dark);
+  color: var(--bg-color);
+  background-color: var(--primary-dark);
+  text-decoration: none;
+}
+
+.btn.plain-primary:hover {
+  color: var(--primary-dark);
+  background-color: var(--bg-color);
+}
+
+.btn.plain-danger {
+  color: var(--bg-color);
+  background-color: var(--error-color);
+  border-color: var(--error-color);
+  text-decoration: none;
+}
+
+.btn.plain-danger:hover{
+  color: var(--error-color);
+  background-color: var(--bg-color);
+}
+
+#liste-instruments .btn.danger{
+  color: var(--error-color);
+  background-color: var(--bg-color);
+  border-color: var(--error-color);
+}
+
+#liste-instruments .btn.danger:hover {
+  color: var(--bg-color);
+  background-color: var(--error-color);
+}
+
+/* ===========================
+   TABLEAU ET FORMULAIRE
+   =========================== */
+.form-control.is-invalid {
+  border-color: var(--error-color);
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23ab0e02'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23ab0e02' stroke='none'/%3e%3c/svg%3e");
+}
+
+.invalid-feedback {
+  color: var(--error-color);
+  font-size: 1rem;
+}
+
 table, .formulaire {
   width: 90%;
   margin: 0 auto;
@@ -173,7 +247,7 @@ table, .formulaire {
 }
 
 thead {
-  background: var(--primary-gradient);
+  background: var(--primary);
   color: var(--primary-dark);
   border-bottom: 0.1875em solid var(--accent-color);
 }
