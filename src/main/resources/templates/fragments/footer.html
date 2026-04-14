@@ -2,8 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org">
   <footer class="header" th:fragment="footer">
     <nav>
-      <a th:href="@{/index}">Accueil</a> |
-      <a th:href="@{/autrePageTest}">Autre page de test</a>
+      <br>
+      <a th:href="@{/index}" th:text="#{titre.accueil}"></a><span> | </span>
+      <a th:href="@{/accessibilite}" th:text="#{titre.accessibilite}"></a><span> | </span>
+      <a th:href="@{/mentionsLegales}" th:text="#{titre.mentionsLegales}"></a>
     </nav>
   </footer>
 </html>

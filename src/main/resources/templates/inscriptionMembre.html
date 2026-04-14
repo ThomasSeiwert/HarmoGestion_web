@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="Fr-fr" xmlns:th="http://www.thymeleaf.org">
-  <head th:replace="fragments/head :: head">
+  <head th:replace="~{fragments/head :: head}">
     <title th:text="${titrePage}">HarmoGestion : Inscription d'un membre</title>
   </head>
   <body>
@@ -9,27 +9,81 @@
       <h1 th:text="#{titre.inscriptionMembre}">Titre</h1>
       <section class="formulaire">
         <form method="post">
+          <!-- Identité-->
+          <input type="hidden" name="csrfToken" th:value="${csrfToken}">
+          <h2 th:text="#{membre.identite}"></h2>
           <!-- Nom-->
           <label for="nom" th:text="#{membre.nom}"></label><br>
-          <input type="text" id="nom" name="membre-nom" placeholder="Volga"><br>
+          <input type="text" id="nom" name="membre-nom" required="required" placeholder="Volga"><br>
           <span id="erreur-nom" class="message-erreur"></span>
           <br>
           <!-- Prénom-->
           <label for="prenom" th:text="#{membre.prenom}"></label><br>
-          <input type="text" id="prenom" name="membre-prenom" placeholder="Alexy"><br>
+          <input type="text" id="prenom" name="membre-prenom" required="required" placeholder="Alexy"><br>
           <span id="erreur-prenom" class="message-erreur"></span>
           <br>
-          <!-- Prénom-->
+          <!-- Date d'inscription-->
           <label for="date" th:text="#{membre.date}"></label><br>
-          <input type="date" id="date" name="membre-date"><br>
+          <input type="date" id="date" name="membre-date" required="required"><br>
           <span id="erreur-date" class="message-erreur"></span>
+          <hr>
+          <h2 th:text="#{instrument.instrument}"></h2>
+
+          <!-- Instruments en cours d'apprentissage-->
+          <!-- TODO: données factice pour le moment-->
+          <table>
+            <thead>
+            <tr>
+              <td th:text="#{instrument.instrumentApprentissage}"></td>
+            </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Triangle</td>
+              </tr>
+            </tbody>
+          </table>
           <br>
+          <label for="instruments-appris" th:text="#{instrument.liste}"></label>
+          <select id="instruments-appris">
+            <option>Basse</option>
+            <option>Grosse caisse</option>
+          </select>
+          <input type="button" class="btn btn-secondary btn-sm" th:value="#{instrument.ajouter}">
+          <br><br>
+
+          <!-- Instruments pratiqués-->
+          <!-- TODO: données factice pour le moment-->
+          <table>
+            <thead>
+              <tr>
+                <td th:text="#{instrument.instrumentPratique}"></td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Contrebasse</td>
+              </tr>
+              <tr>
+                <td>Orgue</td>
+              </tr>
+            </tbody>
+          </table>
+          <br>
+          <label for="instruments-pratique" th:text="#{instrument.liste}"></label>
+          <select id="instruments-pratique">
+            <option>Basse</option>
+            <option>Grosse caisse</option>
+          </select>
+          <input type="button" class="btn btn-secondary btn-sm" th:value="#{instrument.ajouter}">
+          <hr>
+
           <!-- Validation-->
-          <input type="submit" class="btn btn-primary btn-lg" th:value="#{membre.soumettre}">
+          <input type="submit" class="btn btn-primary btn-lg" th:value="#{donnees.valider}">
         </form>
       </section>
     </main>
-    <footer th:replace="fragments/footer :: footer"></footer>
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
     <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
   </body>
 </html>

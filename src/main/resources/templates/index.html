@@ -6,29 +6,38 @@
   <body>
     <header th:replace="fragments/header :: header"></header>
     <main class="container">
-      <h1 th:text="#{titre.accueil}">Accueil</h1>
-      <h2>Liste des membres</h2>
-      <table>
-        <thead>
-        <tr>
-          <th>Nom</th>
-          <th>Prénom</th>
-          <th>Date d'inscription</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:if="${#lists.isEmpty(listeMembres)}">
-          <td colspan="3" th:text="#{donnee.absente}"></td>
-        </tr>
-        <tr th:each="membre : ${listeMembres}">
-          <td th:text="${membre?.nomMembre}">Nom</td>
-          <td th:text="${membre?.prenomMembre}">Prénom</td>
-          <td th:text="${membre?.dateInscriptionMembre}">Date</td>
-        </tr>
-        </tbody>
-      </table>
+      <!-- Membre-->
+      <section class="formulaire">
+        <h1 th:text="#{titre.membres}"></h1>
+        <a type="button" class="btn btn-primary btn-lg" th:text="#{titre.listeMembres}" th:href="@{/listeMembres}"></a>
+        <a type="button" class="btn btn-primary btn-lg" th:text="#{titre.ficheMembre}" th:href="@{ficheMembre}"></a>
+        <a type="button" class="btn btn-primary btn-lg" th:text="#{titre.inscriptionMembre}" th:href="@{inscriptionMembre}"></a>
+      </section>
       <br>
-      <h2><a th:href="@{/autrePageTest}">Aller à l'autre page</a></h2>
+
+      <!-- Cours-->
+      <section class="formulaire">
+        <h1 th:text="#{titre.cours}"></h1>
+        <a type="button" class="btn btn-primary btn-lg" th:text="#{titre.prochainsCours}" th:href="@{prochainsCours}"></a>
+        <a type="button" class="btn btn-primary btn-lg" th:text="#{titre.planifierCours}" th:href="@{planifierCours}"></a>
+      </section>
+      <br>
+
+      <!-- Représentation-->
+      <section class="formulaire">
+        <h1 th:text="#{titre.representations}"></h1>
+        <a type="button" class="btn btn-primary btn-lg" th:text="#{titre.prochainesRepresentations}" th:href="@{prochainesRepresentations}"></a>
+        <a type="button" class="btn btn-primary btn-lg" th:text="#{titre.planifierRepresentation}" th:href="@{planifierRepresentation}"></a>
+      </section>
+      <br>
+
+      <!-- Instrument-->
+      <section class="formulaire">
+        <h1 th:text="#{titre.instruments}"></h1>
+        <a type="button" class="btn btn-primary btn-lg" th:text="#{titre.ajouterInstrument}" th:href="@{ajouterInstrument}"></a>
+      </section>
+      <br>
+
     </main>
     <footer th:replace="fragments/footer :: footer"></footer>
     <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>

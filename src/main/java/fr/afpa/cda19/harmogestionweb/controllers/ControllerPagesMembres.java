@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.UUID;
 
 /**
  * Classe de controller liée aux membres.
@@ -20,6 +21,11 @@ public class ControllerPagesMembres {
      */
     @GetMapping("/ficheMembre")
     public String ficheMembre(Model model) {
+        model.addAttribute("titrePage", "Fiche membre");
+        String tokenCSRF = generationToken();
+        model.addAttribute("csrfToken", tokenCSRF);
+        model.addAttribute("csrfTokenServer", tokenCSRF);
+        jeuEssai(model);
         return "ficheMembre";
     }
 
@@ -30,6 +36,10 @@ public class ControllerPagesMembres {
      */
     @GetMapping("/inscriptionMembre")
     public String inscriptionMembre(Model model) {
+        model.addAttribute("titrePage", "Inscription membre");
+        String tokenCSRF = generationToken();
+        model.addAttribute("csrfToken", tokenCSRF);
+        model.addAttribute("csrfTokenServer", tokenCSRF);
         return "inscriptionMembre";
     }
 
@@ -61,5 +71,14 @@ public class ControllerPagesMembres {
         listeMembres.add(new Membre(5, "Turbo", "Josianne", LocalDate.now()));
         //Affichage
         model.addAttribute("listeMembres", listeMembres);
+    }
+
+    /**
+     * Génère un token CSRF.
+     */
+    String generationToken() {
+        String generation = UUID.randomUUID() + UUID.randomUUID().toString() + UUID.randomUUID();
+        String csrfToken = generation.substring(0, 100);
+        return csrfToken;
     }
 }

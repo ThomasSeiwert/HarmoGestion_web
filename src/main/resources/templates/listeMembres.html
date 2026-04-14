@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="Fr-fr" xmlns:th="http://www.thymeleaf.org">
-  <head th:replace="fragments/head :: head">
+  <head th:replace="~{fragments/head :: head}">
     <title th:text="${titrePage}">HarmoGestion : Liste des membres</title>
   </head>
   <body>
@@ -10,7 +10,7 @@
       <table>
         <thead>
         <tr>
-          <th th:text="#{membre.nom}">Nom</th>
+          <th th:text="#{membre.nom}"></th>
           <th th:text="#{membre.prenom}"></th>
           <th th:text="#{membre.date}"></th>
         </tr>
@@ -20,14 +20,14 @@
           <td colspan="3" th:text="#{donnee.absente}"></td>
         </tr>
         <tr th:each="membreActif : ${listeMembres}">
-          <td th:text="${membreActif?.nomMembre}">Nom</td>
-          <td th:text="${membreActif?.prenomMembre}">Prénom</td>
-          <td th:text="${membreActif?.dateInscriptionMembre}">Date</td>
+          <td th:text="${membreActif?.nomMembre}"></td>
+          <td th:text="${membreActif?.prenomMembre}"></td>
+          <td th:text="${membreActif?.dateInscriptionMembre}"></td>
         </tr>
         </tbody>
       </table>
     </main>
-    <footer th:replace="fragments/footer :: footer"></footer>
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
     <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
   </body>
 </html>

@@ -3,7 +3,7 @@
   <header class="header" th:fragment="header">
     <nav class="navbar navbar-expand-lg navbar-ecf">
       <section class="container-fluid">
-        <a th:href="@{/index}"><img alt="Logo" width="25%" height="25%" th:src="@{/img/LogoSimplifie_Blanc.png}"/></a>
+        <a class="navbar-brand" th:href="@{/index}"><img alt="Logo" class="header-logo" th:src="@{/img/LogoSimplifie_Blanc.png}"/></a>
         <button class="navbar-toggler burger-ecf" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -13,17 +13,17 @@
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" th:text="#{titre.membres}"></a>
               <ul class="dropdown-menu burger-ecf">
-                <a class="nav-link" th:href="@{/listeMembres}" th:text="#{titre.listeMembres}"></a>
-                <a class="nav-link" th:href="@{/ficheMembre}" th:text="#{titre.ficheMembre}"></a>
-                <a class="nav-link" th:href="@{/inscriptionMembre}" th:text="#{titre.inscriptionMembre}"></a>
+                <li><a class="nav-link" th:href="@{/listeMembres}" th:text="#{titre.listeMembres}"></a></li>
+                <li><a class="nav-link" th:href="@{/ficheMembre}" th:text="#{titre.ficheMembre}"></a></li>
+                <li><a class="nav-link" th:href="@{/inscriptionMembre}" th:text="#{titre.inscriptionMembre}"></a></li>
               </ul>
             </li>
             <!-- Cours-->
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" th:text="#{titre.cours}"></a>
               <ul class="dropdown-menu burger-ecf">
-                <a class="nav-link" th:href="@{/planifierCours}" th:text="#{titre.planifierCours}"></a>
-                <a class="nav-link" th:href="@{/prochainsCours}" th:text="#{titre.prochainsCours}"></a>
+                <li><a class="nav-link" th:href="@{/planifierCours}" th:text="#{titre.planifierCours}"></a></li>
+                <li><a class="nav-link" th:href="@{/prochainsCours}" th:text="#{titre.prochainsCours}"></a></li>
               </ul>
             </li>
             <!-- Représentation-->
@@ -31,8 +31,8 @@
               <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" th:text="#{titre.representations}">
               </a>
               <ul class="dropdown-menu burger-ecf">
-                <a class="nav-link" th:href="@{/planifierRepresentation}" th:text="#{titre.planifierRepresentation}"></a>
-                <a class="nav-link" th:href="@{/prochainesRepresentations}" th:text="#{titre.prochainesRepresentations}"></a>
+                <li><a class="nav-link" th:href="@{/planifierRepresentation}" th:text="#{titre.planifierRepresentation}"></a></li>
+                <li><a class="nav-link" th:href="@{/prochainesRepresentations}" th:text="#{titre.prochainesRepresentations}"></a></li>
               </ul>
             </li>
             <!-- Instrument-->
@@ -40,7 +40,7 @@
               <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" th:text="#{titre.instruments}">
               </a>
               <ul class="dropdown-menu burger-ecf">
-                <a class="nav-link" th:href="@{/ajouterInstrument}" th:text="#{titre.ajouterInstrument}"></a>
+                <li><a class="nav-link" th:href="@{/ajouterInstrument}" th:text="#{titre.ajouterInstrument}"></a></li>
               </ul>
             </li>
           </ul>

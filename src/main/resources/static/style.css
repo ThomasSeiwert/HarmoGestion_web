@@ -4,7 +4,7 @@
 :root {
   --bg-color: #f5f7fa;
   --text-color: #333;
-  --primary-gradient: linear-gradient(135deg, #8fe9ff, #003366);
+  --primary-gradient: color-mix(in srgb, #8fe9ff 75%, #003366);/*linear-gradient(135deg, #8fe9ff, #003366);*/
   --primary-dark: #003244;
   --primary-hover: #001a22;
   --accent-color: #5bb8cc;
@@ -27,14 +27,21 @@
 html, body {
   overflow-x: hidden;
   max-width: 100%;
+  height: 100%;
 }
 
 body {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
   font-family: "Segoe UI", Roboto, Arial, sans-serif;
   background: var(--bg-color);
   color: var(--text-color);
   line-height: 1.6;
-  padding-bottom: 3.125em; /* 50px */
+}
+
+.container {
+  flex: 1;
 }
 
 /* ===========================
@@ -136,7 +143,7 @@ footer, .footer {
   padding: 0.9375em;
   border-top: 0.25em solid var(--accent-color);
   margin-top: 2.5em;
-  position: fixed;
+  position: relative;
   width: 100%;
   bottom: 0;
   left: 0;
