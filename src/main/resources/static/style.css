@@ -62,6 +62,10 @@ h2 {
   color: var(--link-color);
 }
 
+h3 {
+  font-size: 1.1em;
+}
+
 a {
   color: var(--link-color);
   text-decoration: none;
@@ -205,6 +209,28 @@ input {
 }
 
 /* ===========================
+   CARDS
+   =========================== */
+
+.row-card {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.col-card {
+  max-width: 33.333333%;
+  flex: 0 0 auto;
+}
+
+.card {
+  align-items: center;
+}
+
+.card-img-top {
+  max-width: 8rem
+}
+
+/* ===========================
    RESPONSIVE
    =========================== */
 
@@ -231,6 +257,10 @@ input {
   .footer-nav {
     flex-direction: column;
     gap: 0.5em;
+  }
+
+  .col-card {
+    max-width: 100%;
   }
 }
 
