@@ -8,18 +8,21 @@
     <main class="container">
       <h1 th:text="#{titre.ficheMembre}"></h1>
       <section class="formulaire">
+
         <!-- Sélection du membre-->
-        <form>
+        <form method="post">
           <label th:text="#{membre.selection}"></label>
           <input type="hidden" name="csrfToken" th:value="${csrfToken}">
           <select id="choix-membre">
             <option th:each="membreActif:${listeMembres}" th:value="${membreActif?.idMembre}" th:text="${membreActif?.nomMembre}+' '+${membreActif?.prenomMembre}"></option>
           </select>
-          <input type="submit">
+          <input type="submit" class="btn btn-secondary btn-sm" th:value="#{donnees.valider}">
         </form>
         <hr>
-        <!-- Identité-->
+
+        <!-- Membre présent-->
         <section th:if="${membre != null}">
+        <!-- Identité-->
           <h2 th:text="#{membre.identite}"></h2>
           <label th:text="#{membre.nom}+ ': '"></label>
           <span th:text="${membre?.nomMembre}"></span><br>
@@ -27,6 +30,7 @@
           <span th:text="${membre?.prenomMembre}"></span><br>
           <label th:text="#{membre.date}+ ': '"></label>
           <span th:text="${membre?.dateInscriptionMembre}"></span><br>
+
           <!-- Instrument-->
           <hr>
           <h2 th:text="#{instrument.instrument}"></h2>
@@ -59,11 +63,19 @@
             </tr>
             </tbody>
           </table>
+
+          <!-- Boutton-->
+          <hr>
+          <button type="button" class="btn btn-primary btn-lg" th:text="#{membre.modifier}"></button>
+          <button type="button" class="btn btn-danger btn-lg" th:text="#{membre.supprimer}"></button>
         </section>
+
+        <!-- Membre absent-->
         <section th:if="${membre == null}">
           <span th:text="#{membre.demandeSelection}"></span>
         </section>
       </section>
+
     </main>
     <footer th:replace="~{fragments/footer :: footer}"></footer>
     <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>

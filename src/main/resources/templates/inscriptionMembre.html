@@ -9,24 +9,26 @@
       <h1 th:text="#{titre.inscriptionMembre}">Titre</h1>
       <section class="formulaire">
         <form method="post">
+          <!-- Identité-->
           <input type="hidden" name="csrfToken" th:value="${csrfToken}">
           <h2 th:text="#{membre.identite}"></h2>
           <!-- Nom-->
           <label for="nom" th:text="#{membre.nom}"></label><br>
-          <input type="text" id="nom" name="membre-nom" placeholder="Volga"><br>
+          <input type="text" id="nom" name="membre-nom" required="required" placeholder="Volga"><br>
           <span id="erreur-nom" class="message-erreur"></span>
           <br>
           <!-- Prénom-->
           <label for="prenom" th:text="#{membre.prenom}"></label><br>
-          <input type="text" id="prenom" name="membre-prenom" placeholder="Alexy"><br>
+          <input type="text" id="prenom" name="membre-prenom" required="required" placeholder="Alexy"><br>
           <span id="erreur-prenom" class="message-erreur"></span>
           <br>
           <!-- Date d'inscription-->
           <label for="date" th:text="#{membre.date}"></label><br>
-          <input type="date" id="date" name="membre-date"><br>
+          <input type="date" id="date" name="membre-date" required="required"><br>
           <span id="erreur-date" class="message-erreur"></span>
           <hr>
           <h2 th:text="#{instrument.instrument}"></h2>
+
           <!-- Instruments en cours d'apprentissage-->
           <!-- TODO: données factice pour le moment-->
           <table>
@@ -49,6 +51,7 @@
           </select>
           <input type="button" class="btn btn-secondary btn-sm" th:value="#{instrument.ajouter}">
           <br><br>
+
           <!-- Instruments pratiqués-->
           <!-- TODO: données factice pour le moment-->
           <table>
@@ -74,8 +77,9 @@
           </select>
           <input type="button" class="btn btn-secondary btn-sm" th:value="#{instrument.ajouter}">
           <hr>
+
           <!-- Validation-->
-          <input type="submit" class="btn btn-primary btn-lg" th:value="#{membre.soumettre}">
+          <input type="submit" class="btn btn-primary btn-lg" th:value="#{donnees.valider}">
         </form>
       </section>
     </main>
