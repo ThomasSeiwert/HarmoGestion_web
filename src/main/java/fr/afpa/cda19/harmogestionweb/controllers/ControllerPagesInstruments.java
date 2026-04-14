@@ -1,7 +1,11 @@
 package fr.afpa.cda19.harmogestionweb.controllers;
 
+import fr.afpa.cda19.harmogestionweb.exceptions.ControllerException;
 import fr.afpa.cda19.harmogestionweb.models.Instrument;
+import fr.afpa.cda19.harmogestionweb.services.InstrumentService;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,28 +25,9 @@ import java.util.Map;
  * @version 1.0.0
  * @since 10/04/2026
  */
+@Slf4j
 @Controller
-public class ControllerPagesInstruments {
-
-    /**
-     * Paramètre 'action' du formulaire.
-     */
-    private static final String ACTION_PARAM = "action";
-
-    /**
-     * Nom du bouton submit du formulaire.
-     */
-    private static final String NOM_SUBMIT_PARAM = "nomSubmit";
-
-    /**
-     * Titre de la page.
-     */
-    private static final String TITRE_PAGE_PARAM = "titrePage";
-
-    /**
-     * Titre du formulaire.
-     */
-    private static final String TITRE_FORM_PARAM = "titreFormulaire";
+public class ControllerPagesInstruments implements IController {
 
     /**
      * Nom du modèle.
@@ -53,6 +38,28 @@ public class ControllerPagesInstruments {
      * Nom de la vue.
      */
     private static final String NOM_FORM_VUE = "formulaireInstrument";
+
+    /**
+     * URL de redirection.
+     */
+    private static final String URL_REDIRECTION = "redirect:/listeInstruments";
+
+    /**
+     * Service faisant le lien entre le contrôleur et le repository.
+     */
+    private final InstrumentService service;
+
+    /**
+     * Initialisation du contrôleur.
+     *
+     * @param service Service faisant le lien entre le contrôleur et
+     *                le repository
+     */
+    public ControllerPagesInstruments(
+            @Autowired
+            final InstrumentService service) {
+        this.service = service;
+    }
 
     /**
      * Méthode d'accès au formulaire d'ajout d'un instrument.
@@ -85,9 +92,8 @@ public class ControllerPagesInstruments {
             modelView.addAllObjects(getParamsFormAjout());
             return modelView;
         }
-        IO.println(instrument);
-        //TODO: envoyer instrument à l'API et traiter le retour
-        return new ModelAndView("redirect:/");
+        service.saveInstrument(instrument);
+        return new ModelAndView(URL_REDIRECTION);
     }
 
     /**
@@ -96,14 +102,18 @@ public class ControllerPagesInstruments {
      * @param id    L'identifiant de l'instrument à modifier
      * @param model Modèle de la page.
      * @return le nom de la vue à afficher
+     * @throws ControllerException levée si aucun instrument n'a cet identifiant
      */
     @GetMapping("/modifierInstrument/{id}")
     public String envoyerFormulaireModificationInstrument(
             @PathVariable
-            final Integer id, final Model model) {
+            final Integer id, final Model model) throws ControllerException {
         model.mergeAttributes(getParamsFormModification(id));
-        //TODO: recup instrument depuis l'API
-        model.addAttribute(NOM_MODEL_PARAM, new Instrument(id, "Ukulele"));
+        Instrument instrument = service.getInstrument(id);
+        if (instrument == null) {
+            throw new ControllerException("La resource n'est pas disponible !");
+        }
+        model.addAttribute(NOM_MODEL_PARAM, instrument);
         return NOM_FORM_VUE;
     }
 
@@ -123,15 +133,24 @@ public class ControllerPagesInstruments {
             final Integer id,
             @ModelAttribute
             @Valid
-            final Instrument instrument, final BindingResult result) {
+            final Instrument instrument, final BindingResult result)
+            throws ControllerException {
         if (result.hasErrors()) {
             ModelAndView modelView = new ModelAndView(NOM_FORM_VUE);
             modelView.addAllObjects(getParamsFormModification(id));
             return modelView;
         }
-        IO.println(instrument);
-        //TODO: envoyer instrument à l'API et traiter le retour
-        return new ModelAndView("redirect:/");
+        if (!id.equals(instrument.getIdInstrument())) {
+            throw new ControllerException("L'identifiant de l'instrument ne "
+                                          + "correspond pas à l'identifiant "
+                                          + "dans l'Url");
+        }
+        Instrument saved = service.saveInstrument(instrument);
+        if (saved == null) {
+            throw new ControllerException("Une erreur est survenue durant la "
+                                          + "sauvegarde de l'instrument");
+        }
+        return new ModelAndView(URL_REDIRECTION);
     }
 
     /**
@@ -144,10 +163,14 @@ public class ControllerPagesInstruments {
     @GetMapping("/supprimerInstrument/{id}")
     public String envoyerFormulaireSuppressionInstrument(
             @PathVariable
-            final Integer id, final Model model) {
+            final Integer id, final Model model) throws ControllerException {
         model.mergeAttributes(getParamsFormSuppression(id));
-        //TODO: recup instrument depuis l'API
-        model.addAttribute(NOM_MODEL_PARAM, new Instrument(id, "Ukulele"));
+        Instrument instrument = service.getInstrument(id);
+        if (instrument == null) {
+            throw new ControllerException("Une erreur est survenue durant la "
+                                          + "sauvegarde de l'instrument");
+        }
+        model.addAttribute(NOM_MODEL_PARAM, instrument);
         return NOM_FORM_VUE;
     }
 
@@ -163,10 +186,21 @@ public class ControllerPagesInstruments {
             @PathVariable
             final Integer id,
             @ModelAttribute
-            final Instrument instrument) {
-        IO.println(instrument);
-        //TODO: envoyer instrument à l'API et traiter le retour
-        return new ModelAndView("redirect:/");
+            final Instrument instrument) throws ControllerException {
+        if (!instrument.getIdInstrument().equals(id)) {
+            throw new ControllerException("L'identifiant de l'instrument ne "
+                                          + "correspond pas à l'identifiant "
+                                          + "dans l'Url");
+        }
+        service.deleteInstrument(id);
+        return new ModelAndView(URL_REDIRECTION);
+    }
+
+    @GetMapping("/listeInstruments")
+    public String listerInstruments(final Model model) {
+        model.addAttribute("instruments", service.getInstruments());
+        model.addAttribute(TITRE_PAGE_PARAM, "Liste des instruments");
+        return "listeInstruments";
     }
 
     /**
@@ -179,8 +213,7 @@ public class ControllerPagesInstruments {
         paramsFormAjout.put(ACTION_PARAM, "/ajouterInstrument");
         paramsFormAjout.put(NOM_SUBMIT_PARAM, "Enregistrer");
         paramsFormAjout.put(TITRE_FORM_PARAM, "Ajouter un instrument");
-        paramsFormAjout.put(TITRE_PAGE_PARAM,
-                            "HarmoGestion : Ajout d'un instrument");
+        paramsFormAjout.put(TITRE_PAGE_PARAM, "Ajout d'un instrument");
         return paramsFormAjout;
     }
 
@@ -195,8 +228,7 @@ public class ControllerPagesInstruments {
         paramsFormModif.put(ACTION_PARAM, "/modifierInstrument/" + id);
         paramsFormModif.put(NOM_SUBMIT_PARAM, "Modifier");
         paramsFormModif.put(TITRE_FORM_PARAM, "Modifier un instrument");
-        paramsFormModif.put(TITRE_PAGE_PARAM,
-                            "HarmoGestion : Modification d'un instrument");
+        paramsFormModif.put(TITRE_PAGE_PARAM, "Modification d'un instrument");
         return paramsFormModif;
     }
 
@@ -211,8 +243,7 @@ public class ControllerPagesInstruments {
         paramsFormSupp.put(ACTION_PARAM, "/supprimerInstrument/" + id);
         paramsFormSupp.put(NOM_SUBMIT_PARAM, "Supprimer");
         paramsFormSupp.put(TITRE_FORM_PARAM, "Supprimer un instrument");
-        paramsFormSupp.put(TITRE_PAGE_PARAM,
-                            "HarmoGestion : Suppression d'un instrument");
+        paramsFormSupp.put(TITRE_PAGE_PARAM, "Suppression d'un instrument");
         return paramsFormSupp;
     }
 }
