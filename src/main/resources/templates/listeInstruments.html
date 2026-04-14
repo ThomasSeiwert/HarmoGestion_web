@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="fr-FR" xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="~{fragments/head :: head}">
+    <title th:text="${titrePage}">HarmoGestion</title>
+  </head>
+  <body>
+    <header th:replace="~{fragments/header :: header}"></header>
+    <main class="container">
+      <h1 class="mb-3">Liste des instruments</h1>
+      <div class="d-flex justify-content-center mb-3">
+        <a class="btn plain-primary" th:href="@{/ajouterInstrument}">Ajouter Un Instrument</a>
+      </div>
+      <table id="liste-instruments">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nom de l'instrument</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="instrument, iStat : ${instruments}">
+            <th class="ps-2" scope="row" th:text="${iStat.index+1}"></th>
+            <td th:text="${instrument.libelleInstrument}"></td>
+            <td class="d-flex flex-column flex-lg-row gap-4 gap-lg-3 my-4 my-lg-0">
+              <a th:href="${'/modifierInstrument/'}+${instrument.idInstrument}"
+                 class="btn primary">Modifier</a>
+              <a th:href="${'/supprimerInstrument/'}+${instrument.idInstrument}" class="btn danger">Supprimer</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </main>
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+    <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
+  </body>
+</html>
