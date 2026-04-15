@@ -3,46 +3,68 @@
   <header class="header" th:fragment="header">
     <nav class="navbar navbar-expand-lg navbar-ecf">
       <section class="container-fluid">
-        <a th:href="@{/index}"><img alt="Logo" width="25%" height="25%" th:src="@{/img/LogoSimplifie_Blanc.png}"/></a>
-        <button class="navbar-toggler burger-ecf" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <a class="navbar-brand" th:href="@{/index}"><img alt="Logo" class="header-logo"
+                                                         th:src="@{/img/LogoSimplifie_Blanc.png}"/></a>
+        <button class="navbar-toggler burger-ecf" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <!-- Membres-->
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" th:text="#{titre.membres}"></a>
+              <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">Membres</a>
               <ul class="dropdown-menu burger-ecf">
-                <a class="nav-link" th:href="@{/listeMembres}" th:text="#{titre.listeMembres}"></a>
-                <a class="nav-link" th:href="@{/ficheMembre}" th:text="#{titre.ficheMembre}"></a>
-                <a class="nav-link" th:href="@{/inscriptionMembre}" th:text="#{titre.inscriptionMembre}"></a>
+                <li>
+                  <a class="nav-link" th:href="@{/listeMembres}">Liste des Membres</a>
+                </li>
+                <li>
+                  <a class="nav-link" th:href="@{/ficheMembre}">Fiche de membre</a>
+                </li>
+                <li>
+                  <a class="nav-link" th:href="@{/inscriptionMembre}">Inscription d'un membre</a>
+                </li>
               </ul>
             </li>
-            <!-- Cours-->
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" th:text="#{titre.cours}"></a>
+              <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">Cours</a>
               <ul class="dropdown-menu burger-ecf">
-                <a class="nav-link" th:href="@{/creerCours}" th:text="#{titre.creerCours}"></a>
-                <a class="nav-link" th:href="@{/modifierCours}" th:text="#{titre.modifierCours}"></a>
-                <a class="nav-link" th:href="@{/supprimerCours}" th:text="#{titre.supprimerCours}"></a>
-                <a class="nav-link" th:href="@{/prochainsCours}" th:text="#{titre.prochainsCours}"></a>
+                <li>
+                  <a class="nav-link" th:href="@{/creerCours}" th:text="#{titre.creerCours}"></a>
+                </li>
+                <li>
+                  <a class="nav-link" th:href="@{/modifierCours}" th:text="#{titre.modifierCours}"></a>
+                </li>
+                <li>
+                  <a class="nav-link" th:href="@{/supprimerCours}" th:text="#{titre.supprimerCours}"></a>
+                </li>
+                <li>
+                  <a class="nav-link" th:href="@{/prochainsCours}" th:text="#{titre.prochainsCours}"></a>
+                </li>
               </ul>
             </li>
-            <!-- Représentation-->
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" th:text="#{titre.representations}">
-              </a>
+              <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">Représentations</a>
               <ul class="dropdown-menu burger-ecf">
-                <a class="nav-link" th:href="@{/planifierRepresentation}" th:text="#{titre.planifierRepresentation}"></a>
-                <a class="nav-link" th:href="@{/prochainesRepresentations}" th:text="#{titre.prochainesRepresentations}"></a>
+                <li>
+                  <a class="nav-link" th:href="@{/planifierRepresentation}">Planifier une représentation</a>
+                </li>
+                <li>
+                  <a class="nav-link" th:href="@{/prochainesRepresentations}">Prochaines représentations</a>
+                </li>
               </ul>
             </li>
-            <!-- Instrument-->
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" th:text="#{titre.instruments}">
-              </a>
+              <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"
+                 aria-expanded="false">Instruments</a>
               <ul class="dropdown-menu burger-ecf">
-                <a class="nav-link" th:href="@{/ajouterInstrument}" th:text="#{titre.ajouterInstrument}"></a>
+                <li>
+                  <a class="nav-link" th:href="@{/ajouterInstrument}">Ajouter un instrument</a>
+                </li>
+                <li>
+                  <a class="nav-link" th:href="@{/listeInstruments}">Liste des instruments</a>
+                </li>
               </ul>
             </li>
           </ul>
