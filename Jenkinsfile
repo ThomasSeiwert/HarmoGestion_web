@@ -21,5 +21,21 @@ pipeline {
                 bat 'mvn clean package'
             }
         }
+        stage('Generate Allure Report') {
+            steps {
+                bat 'mvn allure:report'
+        }
+    }
+
+    post {
+        always {
+            allure([
+                includeProperties: false,
+                jdk: '',
+                properties: [],
+                reportBuildPolicy: 'ALWAYS',
+                results: [[path: 'target/allure-results']
+            ])
+        }
     }
 }
