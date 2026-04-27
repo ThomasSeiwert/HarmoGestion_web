@@ -8,11 +8,17 @@
 
   <body>
     <header th:replace="fragments/header :: header"></header>
+
     <main class="container">
       <!-- Titre principal -->
       <h1>Prochains cours</h1>
+      <!-- Bouton pour ajouter un cours -->
+      <div class="d-flex justify-content-center mb-3">
+        <a class="btn plain-primary" th:href="@{/creerCours}">Ajouter Un Cours</a>
+      </div>
       <!-- Prochains cours -->
       <article class="row row-card">
+        <section th:if="${aucunCours} != null" th:text="${aucunCours}"></section>
         <section th:each="cours : ${prochainsCours}" class="col col-card">
           <div class="card">
             <img th:src="@{/img/clock.svg}" alt="Horloge" id="clock" class="card-img-top">
@@ -28,6 +34,10 @@
                   <li th:text="${participant.prenomMembre} + ' ' + ${participant.nomMembre}">Participant</li>
                 </th:block>
               </ul>
+            </div>
+            <div class="card-footer">
+              <a class="btn primary" th:href="${'/modifierCours/'} + ${cours.idCours}">Modifier</a>
+              <a class="btn danger" th:href="${'/supprimerCours'} + ${cours.idCours}">Supprimer</a>
             </div>
           </div>
         </section>

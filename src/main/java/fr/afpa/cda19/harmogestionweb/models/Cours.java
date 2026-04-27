@@ -1,6 +1,7 @@
 package fr.afpa.cda19.harmogestionweb.models;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -8,7 +9,6 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.apache.logging.log4j.util.PropertySource;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
@@ -27,6 +27,10 @@ import java.util.List;
 @AllArgsConstructor
 public class Cours {
 
+    //--------------------------------------------------------------------------
+    // Attributs
+    //--------------------------------------------------------------------------
+
     /**
      * Identifiant.
      */
@@ -36,6 +40,7 @@ public class Cours {
      * Date du cours.
      */
     @NotNull(message = "Le cours doit avoir une date")
+    @FutureOrPresent(message = "Le cours doit être à une date future")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime dateCours;
 
@@ -50,12 +55,14 @@ public class Cours {
      * Enseignant.
      */
     @NotNull(message = "Le cours doit avoir un enseignant")
+    @Valid
     private Membre enseignant;
 
     /**
      * Instrument enseigné.
      */
-    @NotNull(message = "Le cours doit avoir un instrument enseigné")
+    @NotNull(message = "Le cours doit concerner un instrument")
+    @Valid
     private Instrument instrument;
 
     /**
@@ -63,9 +70,12 @@ public class Cours {
      */
     @NotNull(message = "Le cours doit avoir des participants")
     @Size(min = 1, max = 15, message = "Le nombre de participants doit être "
-                                       + "entre 1 et 15")
-    private List<Membre> participants;
+            + "entre 1 et 15")
+    private List<@Valid Membre> participants;
 
+    //--------------------------------------------------------------------------
+    // Attributs
+    //--------------------------------------------------------------------------
 
     /**
      * Comparator du cours par date.

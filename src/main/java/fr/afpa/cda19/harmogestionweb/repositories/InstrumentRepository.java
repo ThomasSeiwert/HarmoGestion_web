@@ -1,14 +1,15 @@
 package fr.afpa.cda19.harmogestionweb.repositories;
 
+import fr.afpa.cda19.harmogestionweb.exceptions.RepositoryException;
 import fr.afpa.cda19.harmogestionweb.models.Instrument;
 import fr.afpa.cda19.harmogestionweb.utilities.CustomProperties;
+import fr.afpa.cda19.harmogestionweb.utilities.RepositoryUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -18,25 +19,50 @@ import org.springframework.web.client.RestTemplate;
 @Component
 public class InstrumentRepository {
 
+    //--------------------------------------------------------------------------
+    // Attributs
+    //--------------------------------------------------------------------------
+
     /**
      * URL de base de l'API.
      */
     private final String baseApiUrl;
 
     /**
-     * URI des endpoints create, read by id, update, et delete des instruments.
+     * URI concernant les instruments.
      */
-    private final String crudUri;
+    private final String instrumentURI;
 
+    //--------------------------------------------------------------------------
+    // Constructeurs
+    //--------------------------------------------------------------------------
+
+    /**
+     * Constructeur.
+     *
+     * @param customProperties propriétés de l'API
+     */
     public InstrumentRepository(
-            @Autowired
-            final CustomProperties customProperties) {
+            @Autowired final CustomProperties customProperties) {
         baseApiUrl = customProperties.getApiUrl();
-        crudUri = "/instrument";
+        instrumentURI = "/instrument";
     }
 
-    public Iterable<Instrument> getInstruments() {
-        String url = baseApiUrl + "/instruments";
+    //--------------------------------------------------------------------------
+    // Méthodes
+    //--------------------------------------------------------------------------
+
+    /**
+     * Envoi à l'api d'une requête pour récupérer la liste des instruments.
+     *
+     * @return la liste des instruments, ou null si aucun instrument trouvé.
+     *
+     * @throws RepositoryException si une action qui a échoué et qui nécessite
+     *                             d'avertir l'utilisateur est survenue
+     */
+    public Iterable<Instrument> getInstruments() throws RepositoryException {
+
+        String url = baseApiUrl + "instruments";
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<Iterable<Instrument>> response = restTemplate.exchange(
                 url,
@@ -45,11 +71,23 @@ public class InstrumentRepository {
                 new ParameterizedTypeReference<>() {
                 }
         );
-        return response.getBody();
+        RepositoryUtil<Iterable<Instrument>> repositoryUtil = new RepositoryUtil<>();
+        return repositoryUtil.handleResponse(response);
     }
 
-    public Instrument getInstrument(final Integer id) {
-        String url = baseApiUrl + crudUri + "/" + id;
+    /**
+     * Envoi à l'api d'une requête pour récupérer l'instrument correspondant à l'id.
+     *
+     * @param id identifiant de l'instrument recherché
+     *
+     * @return l'instrument correspondant à l'id
+     *
+     * @throws RepositoryException si une action qui a échoué et qui nécessite
+     *                             d'avertir l'utilisateur est survenue
+     */
+    public Instrument getInstrument(final int id) throws RepositoryException {
+
+        String url = baseApiUrl + instrumentURI + "/" + id;
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<Instrument> response = restTemplate.exchange(
                 url,
@@ -57,16 +95,24 @@ public class InstrumentRepository {
                 null,
                 Instrument.class
         );
-        if (response.getStatusCode() == HttpStatus.NOT_FOUND) {
-            assert response.getBody() != null;
-            log.info(response.getBody().getLibelleInstrument());
-            return null;
-        }
-        return response.getBody();
+        RepositoryUtil<Instrument> repositoryUtil = new RepositoryUtil<>();
+        return repositoryUtil.handleResponse(response);
     }
 
-    public Instrument createInstrument(final Instrument instrument) {
-        String url = baseApiUrl + crudUri;
+    /**
+     * Envoi à l'api d'une requête pour créer un instrument.
+     *
+     * @param instrument instrument à créer
+     *
+     * @return l'instrument créé
+     *
+     * @throws RepositoryException si une action qui a échoué et qui nécessite
+     *                             d'avertir l'utilisateur est survenue
+     */
+    public Instrument createInstrument(final Instrument instrument)
+            throws RepositoryException {
+
+        String url = baseApiUrl + instrumentURI;
         RestTemplate restTemplate = new RestTemplate();
         HttpEntity<Instrument> request = new HttpEntity<>(instrument);
         ResponseEntity<Instrument> response = restTemplate.exchange(
@@ -75,22 +121,24 @@ public class InstrumentRepository {
                 request,
                 Instrument.class
         );
-        switch (response.getStatusCode()) {
-            case HttpStatus.CREATED:
-                return response.getBody();
-            case HttpStatus.BAD_REQUEST:
-                assert response.getBody() != null;
-                log.warn(response.getBody().getLibelleInstrument());
-                break;
-            default:
-                assert response.getBody() != null;
-                log.error(response.getBody().getLibelleInstrument());
-        }
-        return null;
+        RepositoryUtil<Instrument> repositoryUtil = new RepositoryUtil<>();
+        return repositoryUtil.handleResponse(response);
     }
 
-    public Instrument updateInstrument(final Instrument instrument) {
-        String url = baseApiUrl + crudUri + "/" + instrument.getIdInstrument();
+    /**
+     * Envoi à l'api d'une requête pour modifier un instrument.
+     *
+     * @param instrument instrument à modifier
+     *
+     * @return l'instrument modifié
+     *
+     * @throws RepositoryException si une action qui a échoué et qui nécessite
+     *                             d'avertir l'utilisateur est survenue
+     */
+    public Instrument updateInstrument(final Instrument instrument)
+            throws RepositoryException {
+
+        String url = baseApiUrl + instrumentURI + "/" + instrument.getIdInstrument();
         RestTemplate restTemplate = new RestTemplate();
         HttpEntity<Instrument> request = new HttpEntity<>(instrument);
         ResponseEntity<Instrument> response = restTemplate.exchange(
@@ -99,29 +147,29 @@ public class InstrumentRepository {
                 request,
                 Instrument.class
         );
-        switch (response.getStatusCode()) {
-            case HttpStatus.OK:
-                return response.getBody();
-            case HttpStatus.BAD_REQUEST:
-                assert response.getBody() != null;
-                log.warn(response.getBody().getLibelleInstrument());
-                break;
-            default:
-                assert response.getBody() != null;
-                log.error(response.getBody().getLibelleInstrument());
-        }
-        return null;
+        RepositoryUtil<Instrument> repositoryUtil = new RepositoryUtil<>();
+        return repositoryUtil.handleResponse(response);
     }
 
-    public void deleteInstrument(final Integer id) {
-        String url = baseApiUrl + crudUri + "/" + id;
+    /**
+     * Envoi à l'api d'une requête pour supprimer un instrument.
+     *
+     * @param id identifiant de l'instrument à supprimer
+     *
+     * @throws RepositoryException si une action qui a échoué et qui nécessite
+     *                             d'avertir l'utilisateur est survenue
+     */
+    public void deleteInstrument(final int id) throws RepositoryException {
+
+        String url = baseApiUrl + instrumentURI + "/" + id;
         RestTemplate restTemplate = new RestTemplate();
-        restTemplate.exchange(
+        ResponseEntity<Void> response = restTemplate.exchange(
                 url,
                 HttpMethod.DELETE,
                 null,
-                new ParameterizedTypeReference<>() {
-                }
+                Void.class
         );
+        RepositoryUtil<Void> repositoryUtil = new RepositoryUtil<>();
+        repositoryUtil.handleResponse(response);
     }
 }

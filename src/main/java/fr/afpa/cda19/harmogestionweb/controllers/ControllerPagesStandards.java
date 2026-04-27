@@ -1,11 +1,8 @@
 package fr.afpa.cda19.harmogestionweb.controllers;
 
-import fr.afpa.cda19.harmogestionweb.models.Membre;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import java.time.LocalDate;
-import java.util.ArrayList;
 
 /**
  * Classe de controller liée aux pages standards (index, accessibilité, mentions légales).

@@ -13,7 +13,11 @@ import java.util.UUID;
  */
 @Controller
 public class ControllerPagesMembres {
-    //==== Méthodes ====
+
+    //--------------------------------------------------------------------------
+    // Méthodes
+    //--------------------------------------------------------------------------
+
     /**
      * Méthode d'accès à la page de fiche de membre.
      * @param model Modèle de la page.
@@ -64,11 +68,11 @@ public class ControllerPagesMembres {
     void jeuEssai(Model model) {
         //Jeu d'essai
         ArrayList<Membre> listeMembres = new ArrayList<>();
-        listeMembres.add(new Membre(1, "Brucker", "Rodolphe", LocalDate.of(2012, 4, 12)));
-        listeMembres.add(new Membre(2, "Didier", "Cédric", LocalDate.of(2013, 8, 26)));
-        listeMembres.add(new Membre(3, "Seiwert", "Thomas", LocalDate.of(2013, 11, 2)));
-        listeMembres.add(new Membre(4, "Ugolini", "Cyril", LocalDate.of(2014, 7, 4)));
-        listeMembres.add(new Membre(5, "Turbo", "Josianne", LocalDate.now()));
+        listeMembres.add(new Membre(1, "Brucker", "Rodolphe", LocalDate.of(2012, 4, 12), new ArrayList<>(), new ArrayList<>()));
+        listeMembres.add(new Membre(2, "Didier", "Cédric", LocalDate.of(2013, 8, 26), new ArrayList<>(), new ArrayList<>()));
+        listeMembres.add(new Membre(3, "Seiwert", "Thomas", LocalDate.of(2013, 11, 2), new ArrayList<>(), new ArrayList<>()));
+        listeMembres.add(new Membre(4, "Ugolini", "Cyril", LocalDate.of(2014, 7, 4), new ArrayList<>(), new ArrayList<>()));
+        listeMembres.add(new Membre(5, "Turbo", "Josianne", LocalDate.now(), new ArrayList<>(), new ArrayList<>()));
         //Affichage
         model.addAttribute("listeMembres", listeMembres);
     }

@@ -1,45 +1,45 @@
 package fr.afpa.cda19.harmogestionweb.services;
 
 import fr.afpa.cda19.harmogestionweb.exceptions.RepositoryException;
-import fr.afpa.cda19.harmogestionweb.models.Cours;
-import fr.afpa.cda19.harmogestionweb.repositories.CoursRepository;
+import fr.afpa.cda19.harmogestionweb.models.Membre;
+import fr.afpa.cda19.harmogestionweb.repositories.MembreRepository;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * Service pour les cours.
+ * Service des membres.
  *
  * @author Seiwert Thomas
  * @version 0.0.1
- * @since 10/04/2026
+ * @since 24/04/2026
  */
 @Service
 @Data
-public class CoursService {
+public class MembreService {
 
     //--------------------------------------------------------------------------
     // Attributs
     //--------------------------------------------------------------------------
 
     /**
-     * Instance de la repository des cours.
+     * Instance de la repository des membres.
      */
-    private CoursRepository coursRepository;
+    private MembreRepository membreRepository;
 
     //--------------------------------------------------------------------------
     // Constructeurs
     //--------------------------------------------------------------------------
 
     /**
-     * Constructeur du service des cours.
+     * Constructeur du service des membres.
      *
-     * @param coursRepository CoursRepository : repository des cours.
+     * @param membreRepository repository des membres.
      */
     @Autowired
-    public CoursService(final CoursRepository coursRepository) {
+    public MembreService(final MembreRepository membreRepository) {
 
-        this.coursRepository = coursRepository;
+        this.membreRepository = membreRepository;
     }
 
     //--------------------------------------------------------------------------
@@ -47,62 +47,62 @@ public class CoursService {
     //--------------------------------------------------------------------------
 
     /**
-     * Service pour récupérer les prochains cours.
+     * Service pour récupérer la liste des membres.
      *
-     * @return la liste des prochains cours, ou null si aucun cours trouvé.
+     * @return la liste des membres, ou null si aucun membre trouvé.
      *
      * @throws RepositoryException si une action qui a échoué et qui nécessite
      *                             d'avertir l'utilisateur est survenue
      */
-    public Iterable<Cours> getProchainsCours() throws RepositoryException {
+    public Iterable<Membre> getMembres() throws RepositoryException {
 
-        return coursRepository.getProchainsCours();
+        return membreRepository.getMembres();
     }
 
     /**
-     * Service pour récupérer le cours correspondant à l'id.
+     * Service pour récupérer le membre correspondant à l'id.
      *
-     * @param id identifiant du cours recherché
+     * @param id identifiant du membre recherché
      *
-     * @return le cours correspondant à l'id
+     * @return le membre correspondant à l'id
      *
      * @throws RepositoryException si une action qui a échoué et qui nécessite
      *                             d'avertir l'utilisateur est survenue
      */
-    public Cours getCours(final int id) throws RepositoryException {
+    public Membre getMembre(final int id) throws RepositoryException {
 
-        return coursRepository.getCours(id);
+        return membreRepository.getMembre(id);
     }
 
     /**
-     * Service pour créer ou modifier un cours.
+     * Service pour créer ou modifier un membre.
      *
-     * @param cours cours à créer ou modifier
+     * @param membre membre à créer ou modifier
      *
-     * @return le cours créé ou modifié
+     * @return le membre créé ou modifié
      *
      * @throws RepositoryException si une action qui a échoué et qui nécessite
      *                             d'avertir l'utilisateur est survenue
      */
-    public Cours saveCours(final Cours cours) throws RepositoryException {
+    public Membre saveMembre(final Membre membre) throws RepositoryException {
 
-        if (cours.getIdCours() == null) {
-            return coursRepository.createCours(cours);
+        if (membre.getIdMembre() == null) {
+            return membreRepository.createMembre(membre);
         } else {
-            return coursRepository.updateCours(cours);
+            return membreRepository.updateMembre(membre);
         }
     }
 
     /**
-     * Service pour supprimer un cours.
+     * Service pour supprimer un membre.
      *
-     * @param id identifiant du cours à supprimer
+     * @param id identifiant du membre à supprimer
      *
      * @throws RepositoryException si une action qui a échoué et qui nécessite
      *                             d'avertir l'utilisateur est survenue
      */
-    public void deleteCours(final int id) throws RepositoryException {
+    public void deleteMembre(final int id) throws RepositoryException {
 
-        coursRepository.deleteCours(id);
+        membreRepository.deleteMembre(id);
     }
 }

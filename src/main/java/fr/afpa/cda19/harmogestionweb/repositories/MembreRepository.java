@@ -1,7 +1,7 @@
 package fr.afpa.cda19.harmogestionweb.repositories;
 
 import fr.afpa.cda19.harmogestionweb.exceptions.RepositoryException;
-import fr.afpa.cda19.harmogestionweb.models.Cours;
+import fr.afpa.cda19.harmogestionweb.models.Membre;
 import fr.afpa.cda19.harmogestionweb.utilities.CustomProperties;
 import fr.afpa.cda19.harmogestionweb.utilities.RepositoryUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -15,16 +15,16 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 /**
- * Repository des cours.
+ * Repository des membres.
  *
  * @author Seiwert Thomas
  * @version 0.0.1
- * @since 10/04/2026
+ * @since 24/04/2026
  */
 @Component
 @EnableConfigurationProperties(CustomProperties.class)
 @Slf4j
-public class CoursRepository {
+public class MembreRepository {
 
     //--------------------------------------------------------------------------
     // Attributs
@@ -36,9 +36,9 @@ public class CoursRepository {
     private final String baseApiUrl;
 
     /**
-     * URI concernant les cours.
+     * URI concernant les membres.
      */
-    private final String coursURI;
+    private final String membreURI;
 
     //--------------------------------------------------------------------------
     // Constructeurs
@@ -49,10 +49,10 @@ public class CoursRepository {
      *
      * @param customProperties propriétés de l'API
      */
-    public CoursRepository(
+    public MembreRepository(
             @Autowired final CustomProperties customProperties) {
         baseApiUrl = customProperties.getApiUrl();
-        coursURI = "/cours";
+        membreURI = "/membre";
     }
 
     //--------------------------------------------------------------------------
@@ -60,113 +60,115 @@ public class CoursRepository {
     //--------------------------------------------------------------------------
 
     /**
-     * Envoi à l'api d'une requête pour récupérer les prochains cours.
+     * Envoi à l'api d'une requête pour récupérer la liste des membres.
      *
-     * @return la liste des prochains cours, ou null si aucun cours trouvé.
+     * @return la liste des membres, ou null si aucun membre trouvé.
      *
      * @throws RepositoryException si une action qui a échoué et qui nécessite
      *                             d'avertir l'utilisateur est survenue
      */
-    public Iterable<Cours> getProchainsCours() throws RepositoryException {
+    public Iterable<Membre> getMembres() throws RepositoryException {
 
-        String url = baseApiUrl + coursURI;
+        String url = baseApiUrl + "membres";
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<Iterable<Cours>> response = restTemplate.exchange(
+        ResponseEntity<Iterable<Membre>> response = restTemplate.exchange(
                 url,
                 HttpMethod.GET,
                 null,
                 new ParameterizedTypeReference<>() {
                 }
         );
-        RepositoryUtil<Iterable<Cours>> repositoryUtil = new RepositoryUtil<>();
+        RepositoryUtil<Iterable<Membre>> repositoryUtil = new RepositoryUtil<>();
         return repositoryUtil.handleResponse(response);
     }
 
     /**
-     * Envoi à l'api d'une requête pour récupérer le cours correspondant à l'id.
+     * Envoi à l'api d'une requête pour récupérer le membre correspondant à l'id.
      *
-     * @param id identifiant du cours recherché
+     * @param id identifiant du membre recherché
      *
-     * @return le cours correspondant à l'id
+     * @return le membre correspondant à l'id
      *
      * @throws RepositoryException si une action qui a échoué et qui nécessite
      *                             d'avertir l'utilisateur est survenue
      */
-    public Cours getCours(final int id) throws RepositoryException {
+    public Membre getMembre(final int id) throws RepositoryException {
 
-        String url = baseApiUrl + coursURI + "/" + id;
+        String url = baseApiUrl + membreURI + "/" + id;
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<Cours> response = restTemplate.exchange(
+        ResponseEntity<Membre> response = restTemplate.exchange(
                 url,
                 HttpMethod.GET,
                 null,
-                Cours.class
+                Membre.class
         );
-        RepositoryUtil<Cours> repositoryUtil = new RepositoryUtil<>();
+        RepositoryUtil<Membre> repositoryUtil = new RepositoryUtil<>();
         return repositoryUtil.handleResponse(response);
     }
 
     /**
-     * Envoi à l'api d'une requête pour créer un cours.
+     * Envoi à l'api d'une requête pour créer un membre.
      *
-     * @param cours cours à créer
+     * @param membre membre à créer
      *
-     * @return le cours créé
+     * @return le membre créé
      *
      * @throws RepositoryException si une action qui a échoué et qui nécessite
      *                             d'avertir l'utilisateur est survenue
      */
-    public Cours createCours(final Cours cours) throws RepositoryException {
+    public Membre createMembre(final Membre membre)
+            throws RepositoryException {
 
-        String url = baseApiUrl + coursURI;
+        String url = baseApiUrl + membreURI;
         RestTemplate restTemplate = new RestTemplate();
-        HttpEntity<Cours> request = new HttpEntity<>(cours);
-        ResponseEntity<Cours> response = restTemplate.exchange(
+        HttpEntity<Membre> request = new HttpEntity<>(membre);
+        ResponseEntity<Membre> response = restTemplate.exchange(
                 url,
                 HttpMethod.POST,
                 request,
-                Cours.class
+                Membre.class
         );
-        RepositoryUtil<Cours> repositoryUtil = new RepositoryUtil<>();
+        RepositoryUtil<Membre> repositoryUtil = new RepositoryUtil<>();
         return repositoryUtil.handleResponse(response);
     }
 
     /**
-     * Envoi à l'api d'une requête pour modifier un cours.
+     * Envoi à l'api d'une requête pour modifier un membre.
      *
-     * @param cours cours à modifier
+     * @param membre membre à modifier
      *
-     * @return le cours modifié
+     * @return le membre modifié
      *
      * @throws RepositoryException si une action qui a échoué et qui nécessite
      *                             d'avertir l'utilisateur est survenue
      */
-    public Cours updateCours(final Cours cours) throws RepositoryException {
+    public Membre updateMembre(final Membre membre)
+            throws RepositoryException {
 
-        String url = baseApiUrl + coursURI + "/" + cours.getIdCours();
+        String url = baseApiUrl + membreURI;
         RestTemplate restTemplate = new RestTemplate();
-        HttpEntity<Cours> request = new HttpEntity<>(cours);
-        ResponseEntity<Cours> response = restTemplate.exchange(
+        HttpEntity<Membre> request = new HttpEntity<>(membre);
+        ResponseEntity<Membre> response = restTemplate.exchange(
                 url,
                 HttpMethod.PUT,
                 request,
-                Cours.class
+                Membre.class
         );
-        RepositoryUtil<Cours> repositoryUtil = new RepositoryUtil<>();
+        RepositoryUtil<Membre> repositoryUtil = new RepositoryUtil<>();
         return repositoryUtil.handleResponse(response);
     }
 
     /**
-     * Envoi à l'api d'une requête pour supprimer un cours.
+     * Envoi à l'api d'une requête pour supprimer un membre.
      *
-     * @param id identifiant du cours à supprimer
+     * @param id identifiant du membre à supprimer
      *
      * @throws RepositoryException si une action qui a échoué et qui nécessite
      *                             d'avertir l'utilisateur est survenue
      */
-    public void deleteCours(final int id) throws RepositoryException {
+    public void deleteMembre(final int id) throws RepositoryException {
 
-        String url = baseApiUrl + coursURI + "/" + id;
+        String url = baseApiUrl + membreURI + "/" + id;
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<Void> response = restTemplate.exchange(
                 url,
