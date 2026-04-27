@@ -69,7 +69,7 @@ public class MembreRepository {
      */
     public Iterable<Membre> getMembres() throws RepositoryException {
 
-        String url = baseApiUrl + "membres";
+        String url = baseApiUrl + "/membres";
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<Iterable<Membre>> response = restTemplate.exchange(
                 url,

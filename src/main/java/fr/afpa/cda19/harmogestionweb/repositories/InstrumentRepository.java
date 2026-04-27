@@ -62,7 +62,7 @@ public class InstrumentRepository {
      */
     public Iterable<Instrument> getInstruments() throws RepositoryException {
 
-        String url = baseApiUrl + "instruments";
+        String url = baseApiUrl + "/instruments";
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<Iterable<Instrument>> response = restTemplate.exchange(
                 url,
