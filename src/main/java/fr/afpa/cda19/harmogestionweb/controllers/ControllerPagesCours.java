@@ -1,5 +1,6 @@
 package fr.afpa.cda19.harmogestionweb.controllers;
 
+import fr.afpa.cda19.harmogestionweb.dto.CoursDto;
 import fr.afpa.cda19.harmogestionweb.exceptions.ControllerException;
 import fr.afpa.cda19.harmogestionweb.exceptions.RepositoryException;
 import fr.afpa.cda19.harmogestionweb.models.Cours;
@@ -12,6 +13,7 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,20 +22,23 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
  * Classe de controller liée aux membres.
  */
 @Controller
+@Log4j2
 public class ControllerPagesCours {
 
-    //--------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
     // Attributs
-    //--------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
 
     /**
      * Instance du service des cours.
@@ -54,19 +59,13 @@ public class ControllerPagesCours {
     private static final String NOM_SUBMIT = "nomSubmit";
     private static final String TITRE_FORM = "titreFormulaire";
     private static final String TITRE_PAGE = "titrePage";
-    private static final String COURS = "cours";
-    private static final String INSTRUMENTS = "instruments";
-    private static final String MEMBRES = "membres";
     private static final String STATUT = "statut";
-    private static final String GERER_COURS = "gererCours";
-    private static final String CREER_UN_COURS = "Créer un cours";
-    private static final String MODIFIER_UN_COURS = "Modifier un cours";
-    private static final String SUPPRIMER_UN_COURS = "Supprimer un cours";
+    private static final String FORM_COURS = "formCours";
     private static final String URL_REDIRECT = "redirect:/prochainsCours";
 
-    //--------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
     // Constructeurs
-    //--------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
 
     /**
      * Constructeur du controller des pages des cours.
@@ -83,9 +82,9 @@ public class ControllerPagesCours {
         this.membreService = membreService;
     }
 
-    //--------------------------------------------------------------------------
-    // Méthodes
-    //--------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
+    // Endpoints
+    //----------------------------------------------------------------------------------------------
 
     /**
      * Méthode d'accès à la page de création de cours vierge.
@@ -95,21 +94,12 @@ public class ControllerPagesCours {
      * @return URI de la page
      */
     @GetMapping("/creerCours")
-    public String creerCours(Model model) {
+    public String creerCoursGet(ModelMap model) {
 
         try {
-            Iterable<Instrument> instruments = instrumentService.getInstruments();
-            Iterable<Membre> membres = membreService.getMembres();
+            setAttributsCreation(model, new Cours(), null, null, new ArrayList<>());
 
-            model.addAttribute(ACTION, "/creerCours");
-            model.addAttribute(NOM_SUBMIT, "Créer");
-            model.addAttribute(TITRE_FORM, CREER_UN_COURS);
-            model.addAttribute(TITRE_PAGE, CREER_UN_COURS);
-            model.addAttribute(COURS, new Cours());
-            model.addAttribute(INSTRUMENTS, instruments);
-            model.addAttribute(MEMBRES, membres);
-
-            return GERER_COURS;
+            return FORM_COURS;
         }
         catch (RepositoryException _) {
             throw new ControllerException("Erreur inconnue");
@@ -119,43 +109,35 @@ public class ControllerPagesCours {
     /**
      * Méthode d'accès à la page de création de cours pour un retour de formulaire.
      *
-     * @param cours Cours : cours entré dans le formulaire
-     * @param model Modèle de la page
+     * @param idParticipants id des participants du cours
+     * @param coursDto       Cours : cours entré dans le formulaire
+     * @param model          Modèle de la page
      *
      * @return page de formulaire si erreur, redirect aux prochains cours si succès
      */
     @PostMapping("/creerCours")
-    public ModelAndView creerCours(
-            @ModelAttribute final Cours cours, ModelMap model) {
+    public ModelAndView creerCoursPost(
+            @RequestParam("instrument") int idInstrument,
+            @RequestParam("enseignant") int idEnseignant,
+            @RequestParam("participants") List<Integer> idParticipants,
+            @ModelAttribute final CoursDto coursDto,
+            ModelMap model) {
 
         try {
-            cours.setInstrument(instrumentService.getInstrument(cours.getInstrument().getIdInstrument()));
-            cours.setEnseignant(membreService.getMembre(cours.getEnseignant().getIdMembre()));
-            ArrayList<Membre> participants = new ArrayList<>();
-            for (Membre membre : cours.getParticipants()) {
-                membre = membreService.getMembre(membre.getIdMembre());
-                participants.add(membre);
-            }
-            cours.setParticipants(participants);
+            Cours cours = completerCours(coursDto, idInstrument, idEnseignant, idParticipants);
 
             Set<ConstraintViolation<Cours>> erreurs = getErreurs(cours);
+            setMessagesErreur(erreurs, model);
 
             if (!erreurs.isEmpty()) {
-                Iterable<Instrument> instruments = instrumentService.getInstruments();
-                Iterable<Membre> membres = membreService.getMembres();
-                model.addAttribute(ACTION, "/creerCours");
-                model.addAttribute(NOM_SUBMIT, "Créer");
-                model.addAttribute(TITRE_FORM, CREER_UN_COURS);
-                model.addAttribute(TITRE_PAGE, CREER_UN_COURS);
-                model.addAttribute(COURS, cours);
-                model.addAttribute(INSTRUMENTS, instruments);
-                model.addAttribute(MEMBRES, membres);
+                setAttributsCreation(model, cours, idInstrument, idEnseignant, idParticipants);
 
-                return new ModelAndView(GERER_COURS, model);
+                return new ModelAndView(FORM_COURS, model);
             }
             else {
                 coursService.saveCours(cours);
-                model.addAttribute(STATUT, "Création réussie");
+                model.addAttribute(STATUT, "created");
+
                 return new ModelAndView(URL_REDIRECT, model);
             }
         }
@@ -173,25 +155,21 @@ public class ControllerPagesCours {
      * @return URI de la page
      */
     @GetMapping("/modifierCours/{id}")
-    public String modifierCours(
+    public String modifierCoursGet(
             @PathVariable final int id,
-            Model model) {
+            ModelMap model) {
 
         try {
             Cours cours = coursService.getCours(id);
+            ArrayList<Integer> idParticipants = new ArrayList<>();
+            for (Membre membre : cours.getParticipants()) {
+                idParticipants.add(membre.getIdMembre());
+            }
 
-            Iterable<Instrument> instruments = instrumentService.getInstruments();
-            Iterable<Membre> membres = membreService.getMembres();
+            setAttributsModification(model, cours, cours.getInstrument().getIdInstrument(),
+                    cours.getEnseignant().getIdMembre(), idParticipants, id);
 
-            model.addAttribute(ACTION, "/modifierCours/" + id);
-            model.addAttribute(NOM_SUBMIT, "Modifier");
-            model.addAttribute(TITRE_FORM, MODIFIER_UN_COURS);
-            model.addAttribute(TITRE_PAGE, MODIFIER_UN_COURS);
-            model.addAttribute(COURS, cours);
-            model.addAttribute(INSTRUMENTS, instruments);
-            model.addAttribute(MEMBRES, membres);
-
-            return GERER_COURS;
+            return FORM_COURS;
         }
         catch (RepositoryException _) {
             throw new ControllerException("Erreur inconnue");
@@ -201,45 +179,37 @@ public class ControllerPagesCours {
     /**
      * Méthode d'accès à la page de modification de cours pour retour de formulaire.
      *
-     * @param id    int : id du cours
-     * @param cours Cours : le cours
-     * @param model Modèle de la page
+     * @param id       int : id du cours
+     * @param coursDto Cours : le cours
+     * @param model    Modèle de la page
      *
      * @return page de formulaire si erreur, redirect aux prochains cours si succès
      */
     @PostMapping("/modifierCours/{id}")
-    public ModelAndView modifierCours(
+    public ModelAndView modifierCoursPost(
             @PathVariable final int id,
-            @ModelAttribute final Cours cours, ModelMap model) {
+            @RequestParam("instrument") int idInstrument,
+            @RequestParam("enseignant") int idEnseignant,
+            @RequestParam("participants") List<Integer> idParticipants,
+            @ModelAttribute final CoursDto coursDto,
+            ModelMap model) {
 
         try {
-            cours.setInstrument(instrumentService.getInstrument(cours.getInstrument().getIdInstrument()));
-            cours.setEnseignant(membreService.getMembre(cours.getEnseignant().getIdMembre()));
-            ArrayList<Membre> participants = new ArrayList<>();
-            for (Membre membre : cours.getParticipants()) {
-                membre = membreService.getMembre(membre.getIdMembre());
-                participants.add(membre);
-            }
-            cours.setParticipants(participants);
+            Cours cours = completerCours(coursDto, idInstrument, idEnseignant, idParticipants);
 
             Set<ConstraintViolation<Cours>> erreurs = getErreurs(cours);
+            setMessagesErreur(erreurs, model);
 
             if (!erreurs.isEmpty()) {
-                Iterable<Instrument> instruments = instrumentService.getInstruments();
-                Iterable<Membre> membres = membreService.getMembres();
-                model.addAttribute(ACTION, "/modifierCours/" + id);
-                model.addAttribute(NOM_SUBMIT, "Modifier");
-                model.addAttribute(TITRE_FORM, MODIFIER_UN_COURS);
-                model.addAttribute(TITRE_PAGE, MODIFIER_UN_COURS);
-                model.addAttribute(COURS, cours);
-                model.addAttribute(INSTRUMENTS, instruments);
-                model.addAttribute(MEMBRES, membres);
+                setAttributsModification(model, cours, idInstrument, idEnseignant,
+                        idParticipants, id);
 
-                return new ModelAndView(GERER_COURS, model);
+                return new ModelAndView(FORM_COURS, model);
             }
             else {
                 coursService.saveCours(cours);
                 model.addAttribute(STATUT, "Modification réussie");
+
                 return new ModelAndView(URL_REDIRECT, model);
             }
         }
@@ -257,25 +227,21 @@ public class ControllerPagesCours {
      * @return URI de la page
      */
     @GetMapping("/supprimerCours/{id}")
-    public String supprimerCours(
+    public String supprimerCoursGet(
             @PathVariable final int id,
-            Model model) {
+            ModelMap model) {
 
         try {
             Cours cours = coursService.getCours(id);
+            ArrayList<Integer> idParticipants = new ArrayList<>();
+            for (Membre membre : cours.getParticipants()) {
+                idParticipants.add(membre.getIdMembre());
+            }
 
-            Iterable<Instrument> instruments = instrumentService.getInstruments();
-            Iterable<Membre> membres = membreService.getMembres();
+            setAttributsSuppression(model, cours, cours.getInstrument().getIdInstrument(),
+                    cours.getEnseignant().getIdMembre(), idParticipants, id);
 
-            model.addAttribute(ACTION, "/supprimerCours/" + id);
-            model.addAttribute(NOM_SUBMIT, "Supprimer");
-            model.addAttribute(TITRE_FORM, SUPPRIMER_UN_COURS);
-            model.addAttribute(TITRE_PAGE, SUPPRIMER_UN_COURS);
-            model.addAttribute(COURS, cours);
-            model.addAttribute(INSTRUMENTS, instruments);
-            model.addAttribute(MEMBRES, membres);
-
-            return GERER_COURS;
+            return FORM_COURS;
         }
         catch (RepositoryException _) {
             throw new ControllerException("Erreur inconnue");
@@ -291,7 +257,7 @@ public class ControllerPagesCours {
      * @return redirect à la selection de cours
      */
     @PostMapping("/supprimerCours/{id}")
-    public ModelAndView supprimerCours(
+    public ModelAndView supprimerCoursPost(
             @PathVariable final int id,
             ModelMap model) {
 
@@ -317,8 +283,7 @@ public class ControllerPagesCours {
     public String prochainsCours(Model model) {
 
         try {
-            ArrayList<Cours> listeCours =
-                    (ArrayList<Cours>) coursService.getProchainsCours();
+            ArrayList<Cours> listeCours = (ArrayList<Cours>) coursService.getProchainsCours();
 
             // si un cours a été trouvé, on affiche les 3 prochains cours au max
             listeCours.sort(Cours.COMPARATOR_DATE);
@@ -331,14 +296,46 @@ public class ControllerPagesCours {
             }
             model.addAttribute("prochainsCours", prochainsCours);
         }
-        catch (RepositoryException _) {
+        catch (RepositoryException re) {
             // si aucun cours n'a été trouvé, on affiche un message
-            model.addAttribute("aucunCours",
-                    "Il n'y a pas de prochains cours pour le moment");
+            model.addAttribute("aucunCours", re.getMessage());
         }
         model.addAttribute(TITRE_PAGE, "Prochains Cours");
 
         return "prochainsCours";
+    }
+
+    //----------------------------------------------------------------------------------------------
+    // Méthodes
+    //----------------------------------------------------------------------------------------------
+
+    /**
+     * Méthode pour compléter un cours d'après le retour de formulaire.
+     *
+     * @param coursDto       Cours à compléter
+     * @param idInstrument   Id de l'instrument du cours
+     * @param idEnseignant   Id de l'enseignant du cours
+     * @param idParticipants Liste des id des participants du cours
+     *
+     * @return Cours complété
+     *
+     * @throws RepositoryException Si une erreur est survenue
+     */
+    private Cours completerCours(final CoursDto coursDto, final int idInstrument,
+                                 final int idEnseignant, final List<Integer> idParticipants)
+            throws RepositoryException {
+
+        Cours cours = Cours.clone(coursDto);
+        cours.setInstrument(instrumentService.getInstrument(idInstrument));
+        cours.setEnseignant(membreService.getMembre(idEnseignant));
+        ArrayList<Membre> participants = new ArrayList<>();
+        for (int id : idParticipants) {
+            Membre membre = membreService.getMembre(id);
+            participants.add(membre);
+        }
+        cours.setParticipants(participants);
+
+        return cours;
     }
 
     /**
@@ -348,16 +345,126 @@ public class ControllerPagesCours {
      *
      * @return Set : liste des erreurs de saisies pour le cours.
      */
-    private static Set<ConstraintViolation<Cours>> getErreurs(
+    private Set<ConstraintViolation<Cours>> getErreurs(
             final Cours cours) {
 
-        try (ValidatorFactory validatorFactory =
-                     Validation.buildDefaultValidatorFactory()) {
+        try (ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory()) {
 
             Validator validator =
                     validatorFactory.getValidator();
 
             return validator.validate(cours);
         }
+    }
+
+    /**
+     * Méthode pour ajouter en attributs les messages d'erreur de saisie.
+     *
+     * @param erreurs Erreurs de saisie
+     * @param model   Modèle de la page
+     */
+    private void setMessagesErreur(
+            final Set<ConstraintViolation<Cours>> erreurs, ModelMap model) {
+
+        for (ConstraintViolation<Cours> erreur : erreurs) {
+            model.addAttribute(erreur.getPropertyPath() + "Err", erreur.getMessage());
+        }
+    }
+
+    /**
+     * Méthode pour ajouter les attributs communs aux formulaires.
+     *
+     * @param model          Modèle de la page
+     * @param cours          Cours géré
+     * @param idInstrument   Id de l'instrument du cours
+     * @param idEnseignant   Id de l'enseignant du cours
+     * @param idParticipants Liste des id des participants du cours
+     *
+     * @throws RepositoryException Si une erreur est survenue
+     */
+    private void setAttributsCommuns(ModelMap model, Cours cours,
+                                     Integer idInstrument, Integer idEnseignant,
+                                     List<Integer> idParticipants)
+            throws RepositoryException {
+
+        Iterable<Instrument> instruments = instrumentService.getInstruments();
+        Iterable<Membre> membres = membreService.getMembres();
+        model.addAttribute("instruments", instruments);
+        model.addAttribute("membres", membres);
+        model.addAttribute("cours", cours);
+        model.addAttribute("idInstrument", idInstrument);
+        model.addAttribute("idEnseignant", idEnseignant);
+        model.addAttribute("idParticipant", idParticipants);
+    }
+
+    /**
+     * Méthode pour ajouter les attributs du formulaire de création.
+     *
+     * @param model          Modèle de la page
+     * @param cours          Cours géré
+     * @param idInstrument   Id de l'instrument du cours
+     * @param idEnseignant   Id de l'enseignant du cours
+     * @param idParticipants Liste des id des participants du cours
+     *
+     * @throws RepositoryException Si une erreur est survenue
+     */
+    private void setAttributsCreation(ModelMap model, Cours cours,
+                                      Integer idInstrument, Integer idEnseignant,
+                                      List<Integer> idParticipants)
+            throws RepositoryException {
+
+        setAttributsCommuns(model, cours, idInstrument, idEnseignant, idParticipants);
+        model.addAttribute(ACTION, "/creerCours");
+        model.addAttribute(NOM_SUBMIT, "Créer");
+        model.addAttribute(TITRE_FORM, "Créer un cours");
+        model.addAttribute(TITRE_PAGE, "Créer un cours");
+    }
+
+    /**
+     * Méthode pour ajouter les attributs du formulaire de modification.
+     *
+     * @param model          Modèle de la page
+     * @param cours          Cours géré
+     * @param idInstrument   Id de l'instrument du cours
+     * @param idEnseignant   Id de l'enseignant du cours
+     * @param idParticipants Liste des id des participants du cours
+     * @param idCours        Id du cours
+     *
+     * @throws RepositoryException Si une erreur est survenue
+     */
+    private void setAttributsModification(ModelMap model, Cours cours,
+                                          Integer idInstrument, Integer idEnseignant,
+                                          List<Integer> idParticipants, int idCours)
+            throws RepositoryException {
+
+        setAttributsCommuns(model, cours, idInstrument, idEnseignant, idParticipants);
+        model.addAttribute(ACTION, "/modifierCours/" + idCours);
+        model.addAttribute(NOM_SUBMIT, "Modifier");
+        model.addAttribute(TITRE_FORM, "Modifier un cours");
+        model.addAttribute(TITRE_PAGE, "Modifier un cours");
+    }
+
+    /**
+     * Méthode pour ajouter les attributs du formulaire de suppression.
+     *
+     * @param model          Modèle de la page
+     * @param cours          Cours géré
+     * @param idInstrument   Id de l'instrument du cours
+     * @param idEnseignant   Id de l'enseignant du cours
+     * @param idParticipants Liste des id des participants du cours
+     * @param idCours        Id du cours
+     *
+     * @throws RepositoryException Si une erreur est survenue
+     */
+    private void setAttributsSuppression(ModelMap model, Cours cours,
+                                         Integer idInstrument, Integer idEnseignant,
+                                         List<Integer> idParticipants, int idCours)
+            throws RepositoryException {
+
+        setAttributsCommuns(model, cours, idInstrument, idEnseignant, idParticipants);
+        model.addAttribute(ACTION, "/supprimerCours/" + idCours);
+        model.addAttribute(NOM_SUBMIT, "Supprimer");
+        model.addAttribute(TITRE_FORM, "Supprimer un cours");
+        model.addAttribute(TITRE_PAGE, "Supprimer un cours");
     }
 }
