@@ -27,6 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -281,10 +282,11 @@ public class ControllerPagesCours {
      */
     @GetMapping("/prochainsCours")
     public String prochainsCours(
-            @RequestParam(required = false) String statut,
+            @RequestParam(required = false) Optional<String> statut,
             Model model) {
 
-        switch (statut) {
+        if (statut.isPresent()) {
+        switch (statut.get()) {
             case "created":
                 model.addAttribute(STATUT, "Création réussie");
                 break;
@@ -295,6 +297,7 @@ public class ControllerPagesCours {
                 model.addAttribute(STATUT, "Suppression réussie");
                 break;
             default:
+        }
         }
         try {
             ArrayList<Cours> listeCours = (ArrayList<Cours>) coursService.getProchainsCours();
