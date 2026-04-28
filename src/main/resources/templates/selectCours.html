@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+
+<html lang="fr-FR" xmlns:th="http://www.thymeleaf.org">
+
+  <head th:replace="~{fragments/head :: head}">
+    <title th:text="${titrePage}">HarmoGestion : Créer un cours</title>
+  </head>
+
+  <body>
+    <header th:replace="~{fragments/header :: header}"></header>
+
+    <main class="container">
+      <h1 th:text="${titreFormulaire}">Sélectionner</h1>
+      <form action="#" th:action="${action}" id="form-cours" method="post">
+        <div class="alert alert-success" role="alert" th:text="${statut}" th:hidden="${statut == null}"></div>
+        <div class="mb-3">
+          <label class="form-label" for="cours">Cours</label>
+          <select class="form-select" id="cours" name="cours" required>
+            <option selected value="">--Choisir--</option>
+            <option th:each="cours : ${listeCours}" th:value="${cours.idCours}"
+                    th:text="${#temporals.format(cours.dateCours, 'dd/MM/yyyy - HH:mm')} + ' - '
+                    + ${cours.instrument.libelleInstrument}+ ' - ' + ${cours.enseignant.nomMembre}">
+          </select>
+        </div>
+        <div>
+          <button class="btn btn-dark" type="submit" th:text="${nomSubmit}">Enregistrer</button>
+        </div>
+      </form>
+    </main>
+
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+    <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
+  </body>
+
+</html>

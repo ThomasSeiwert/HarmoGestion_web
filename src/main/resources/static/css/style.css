@@ -208,13 +208,13 @@ footer, .footer {
   background-color: var(--bg-color);
 }
 
-#liste-instruments .btn.danger{
+.btn.danger{
   color: var(--error-color);
   background-color: var(--bg-color);
   border-color: var(--error-color);
 }
 
-#liste-instruments .btn.danger:hover {
+.btn.danger:hover {
   color: var(--bg-color);
   background-color: var(--error-color);
 }
@@ -307,6 +307,13 @@ input {
 /* ===========================
    RESPONSIVE
    =========================== */
+
+/* 992px -> 62em */
+@media (max-width: 62em) {
+    .col-card {
+        max-width: 50%;
+    }
+}
 
 /* 768px -> 48em */
 @media (max-width: 48em) {

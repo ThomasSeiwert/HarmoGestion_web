@@ -8,5 +8,6 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "fr.afpa.cda19.harmogestionweb")
 @Data
 public class CustomProperties {
+
     private String apiUrl;
 }

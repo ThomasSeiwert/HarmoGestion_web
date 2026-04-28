@@ -1,5 +1,6 @@
 package fr.afpa.cda19.harmogestionweb.models;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
@@ -8,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  * Classe représentant un membre.
@@ -20,6 +22,11 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Membre {
+
+    //--------------------------------------------------------------------------
+    // Attributs
+    //--------------------------------------------------------------------------
+
     /**
      * Identifiant du membre.
      */
@@ -30,8 +37,8 @@ public class Membre {
      */
     @NotBlank(message = "Un membre doit avoir un nom.")
     @Size(min = 3, max = 30,
-          message = "Le nom du membre doit faire entre trois "
-                    + "et cinquante caractères de long")
+            message = "Le nom du membre doit faire entre trois "
+                    + "et trente caractères de long")
     private String nomMembre;
 
     /**
@@ -39,7 +46,7 @@ public class Membre {
      */
     @NotBlank(message = "Un membre doit avoir un prénom.")
     @Size(min = 3, max = 30,
-          message = "Le prénom du membre doit faire entre trois "
+            message = "Le prénom du membre doit faire entre trois "
                     + "et trente caractères de long.")
     private String prenomMembre;
 
@@ -49,4 +56,18 @@ public class Membre {
     @NotNull(message = "Un membre doit avoir une date d'inscription.")
     @PastOrPresent(message = "Une date d'inscription ne peut pas être future.")
     private LocalDate dateInscriptionMembre;
+
+    /**
+     * Liste des instruments maitrisés.
+     */
+    @Size(max = 20, message = "Un membre peut maitriser au maximum"
+            + " 20 instruments")
+    private List<@Valid Instrument> instrumentsMaitrises;
+
+    /**
+     * Liste des instruments en apprentissage.
+     */
+    @Size(max = 10, message = "Un membre peut apprendre au maximum"
+            + " 10 instruments")
+    private List<@Valid Instrument> instrumentsAppris;
 }

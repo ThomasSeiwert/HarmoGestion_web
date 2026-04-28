@@ -1,7 +1,7 @@
 package fr.afpa.cda19.harmogestionweb.repositories;
 
 import fr.afpa.cda19.harmogestionweb.exceptions.RepositoryException;
-import fr.afpa.cda19.harmogestionweb.models.Instrument;
+import fr.afpa.cda19.harmogestionweb.models.Membre;
 import fr.afpa.cda19.harmogestionweb.utilities.CustomProperties;
 import fr.afpa.cda19.harmogestionweb.utilities.RepositoryUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -14,10 +14,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-@Slf4j
-@EnableConfigurationProperties(CustomProperties.class)
+/**
+ * Repository des membres.
+ *
+ * @author Seiwert Thomas
+ * @version 0.0.1
+ * @since 24/04/2026
+ */
 @Component
-public class InstrumentRepository {
+@EnableConfigurationProperties(CustomProperties.class)
+@Slf4j
+public class MembreRepository {
 
     //--------------------------------------------------------------------------
     // Attributs
@@ -29,9 +36,9 @@ public class InstrumentRepository {
     private final String baseApiUrl;
 
     /**
-     * URI concernant les instruments.
+     * URI concernant les membres.
      */
-    private final String instrumentURI;
+    private final String membreURI;
 
     //--------------------------------------------------------------------------
     // Constructeurs
@@ -42,10 +49,10 @@ public class InstrumentRepository {
      *
      * @param customProperties propriétés de l'API
      */
-    public InstrumentRepository(
+    public MembreRepository(
             @Autowired final CustomProperties customProperties) {
         baseApiUrl = customProperties.getApiUrl();
-        instrumentURI = "/instrument";
+        membreURI = "/membre";
     }
 
     //--------------------------------------------------------------------------
@@ -53,117 +60,115 @@ public class InstrumentRepository {
     //--------------------------------------------------------------------------
 
     /**
-     * Envoi à l'api d'une requête pour récupérer la liste des instruments.
+     * Envoi à l'api d'une requête pour récupérer la liste des membres.
      *
-     * @return la liste des instruments, ou null si aucun instrument trouvé.
+     * @return la liste des membres, ou null si aucun membre trouvé.
      *
      * @throws RepositoryException si une action qui a échoué et qui nécessite
      *                             d'avertir l'utilisateur est survenue
      */
-    public Iterable<Instrument> getInstruments() throws RepositoryException {
+    public Iterable<Membre> getMembres() throws RepositoryException {
 
-        String url = baseApiUrl + "/instruments";
+        String url = baseApiUrl + "/membres";
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<Iterable<Instrument>> response = restTemplate.exchange(
+        ResponseEntity<Iterable<Membre>> response = restTemplate.exchange(
                 url,
                 HttpMethod.GET,
                 null,
                 new ParameterizedTypeReference<>() {
                 }
         );
-        RepositoryUtil<Iterable<Instrument>> repositoryUtil = new RepositoryUtil<>();
-        return repositoryUtil.handleResponse(response, "Aucun instrument trouvé");
+        RepositoryUtil<Iterable<Membre>> repositoryUtil = new RepositoryUtil<>();
+        return repositoryUtil.handleResponse(response, "Aucun membre trouvé");
     }
 
     /**
-     * Envoi à l'api d'une requête pour récupérer l'instrument correspondant à l'id.
+     * Envoi à l'api d'une requête pour récupérer le membre correspondant à l'id.
      *
-     * @param id identifiant de l'instrument recherché
+     * @param id identifiant du membre recherché
      *
-     * @return l'instrument correspondant à l'id
+     * @return le membre correspondant à l'id
      *
      * @throws RepositoryException si une action qui a échoué et qui nécessite
      *                             d'avertir l'utilisateur est survenue
      */
-    public Instrument getInstrument(final int id) throws RepositoryException {
+    public Membre getMembre(final int id) throws RepositoryException {
 
-        String url = baseApiUrl + instrumentURI + "/" + id;
+        String url = baseApiUrl + membreURI + "/" + id;
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<Instrument> response = restTemplate.exchange(
+        ResponseEntity<Membre> response = restTemplate.exchange(
                 url,
                 HttpMethod.GET,
                 null,
-                Instrument.class
+                Membre.class
         );
-        RepositoryUtil<Instrument> repositoryUtil = new RepositoryUtil<>();
+        RepositoryUtil<Membre> repositoryUtil = new RepositoryUtil<>();
         return repositoryUtil.handleResponse(response, null);
     }
 
     /**
-     * Envoi à l'api d'une requête pour créer un instrument.
+     * Envoi à l'api d'une requête pour créer un membre.
      *
-     * @param instrument instrument à créer
+     * @param membre membre à créer
      *
-     * @return l'instrument créé
+     * @return le membre créé
      *
      * @throws RepositoryException si une action qui a échoué et qui nécessite
      *                             d'avertir l'utilisateur est survenue
      */
-    public Instrument createInstrument(final Instrument instrument)
+    public Membre createMembre(final Membre membre)
             throws RepositoryException {
 
-        String url = baseApiUrl + instrumentURI;
+        String url = baseApiUrl + membreURI;
         RestTemplate restTemplate = new RestTemplate();
-        HttpEntity<Instrument> request = new HttpEntity<>(instrument);
-        ResponseEntity<Instrument> response = restTemplate.exchange(
+        HttpEntity<Membre> request = new HttpEntity<>(membre);
+        ResponseEntity<Membre> response = restTemplate.exchange(
                 url,
                 HttpMethod.POST,
                 request,
-                Instrument.class
+                Membre.class
         );
-        RepositoryUtil<Instrument> repositoryUtil = new RepositoryUtil<>();
-        return repositoryUtil.handleResponse(response,
-                "Cet instrument existe déjà");
+        RepositoryUtil<Membre> repositoryUtil = new RepositoryUtil<>();
+        return repositoryUtil.handleResponse(response, null);
     }
 
     /**
-     * Envoi à l'api d'une requête pour modifier un instrument.
+     * Envoi à l'api d'une requête pour modifier un membre.
      *
-     * @param instrument instrument à modifier
+     * @param membre membre à modifier
      *
-     * @return l'instrument modifié
+     * @return le membre modifié
      *
      * @throws RepositoryException si une action qui a échoué et qui nécessite
      *                             d'avertir l'utilisateur est survenue
      */
-    public Instrument updateInstrument(final Instrument instrument)
+    public Membre updateMembre(final Membre membre)
             throws RepositoryException {
 
-        String url = baseApiUrl + instrumentURI + "/" + instrument.getIdInstrument();
+        String url = baseApiUrl + membreURI;
         RestTemplate restTemplate = new RestTemplate();
-        HttpEntity<Instrument> request = new HttpEntity<>(instrument);
-        ResponseEntity<Instrument> response = restTemplate.exchange(
+        HttpEntity<Membre> request = new HttpEntity<>(membre);
+        ResponseEntity<Membre> response = restTemplate.exchange(
                 url,
                 HttpMethod.PUT,
                 request,
-                Instrument.class
+                Membre.class
         );
-        RepositoryUtil<Instrument> repositoryUtil = new RepositoryUtil<>();
-        return repositoryUtil.handleResponse(response,
-                "Cet instrument existe déjà");
+        RepositoryUtil<Membre> repositoryUtil = new RepositoryUtil<>();
+        return repositoryUtil.handleResponse(response, null);
     }
 
     /**
-     * Envoi à l'api d'une requête pour supprimer un instrument.
+     * Envoi à l'api d'une requête pour supprimer un membre.
      *
-     * @param id identifiant de l'instrument à supprimer
+     * @param id identifiant du membre à supprimer
      *
      * @throws RepositoryException si une action qui a échoué et qui nécessite
      *                             d'avertir l'utilisateur est survenue
      */
-    public void deleteInstrument(final int id) throws RepositoryException {
+    public void deleteMembre(final int id) throws RepositoryException {
 
-        String url = baseApiUrl + instrumentURI + "/" + id;
+        String url = baseApiUrl + membreURI + "/" + id;
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<Void> response = restTemplate.exchange(
                 url,
@@ -173,6 +178,6 @@ public class InstrumentRepository {
         );
         RepositoryUtil<Void> repositoryUtil = new RepositoryUtil<>();
         repositoryUtil.handleResponse(response,
-                "Vous ne pouvez pas supprimer cet instrument car il est utilisé");
+                "Vous ne pouvez pas supprimer ce membre car il est utilisé");
     }
 }

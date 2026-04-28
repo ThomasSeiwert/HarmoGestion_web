@@ -31,10 +31,12 @@
               <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">Cours</a>
               <ul class="dropdown-menu burger-ecf">
                 <li>
-                  <a class="nav-link" th:href="@{/planifierCours}">Planifier un cours</a>
+                  <a class="nav-link" th:href="@{/creerCours}" th:text="#{titre.creerCours}"></a>
                 </li>
                 <li>
-                  <a class="nav-link" th:href="@{/prochainsCours}">Prochains cours</a>
+                </li>
+                <li>
+                  <a class="nav-link" th:href="@{/prochainsCours}" th:text="#{titre.prochainsCours}"></a>
                 </li>
               </ul>
             </li>
