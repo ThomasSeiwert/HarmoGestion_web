@@ -12,6 +12,8 @@
     <main class="container">
       <!-- Titre principal -->
       <h1>Prochains cours</h1>
+      <!-- Message d'alerte -->
+      <div class="alert alert-success" role="alert" th:text="${statut}" th:hidden="${statut == null}"></div>
       <!-- Bouton pour ajouter un cours -->
       <div class="d-flex justify-content-center mb-3">
         <a class="btn plain-primary" th:href="@{/creerCours}">Ajouter Un Cours</a>

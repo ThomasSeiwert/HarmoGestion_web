@@ -208,7 +208,7 @@ public class ControllerPagesCours {
             }
             else {
                 coursService.saveCours(cours);
-                model.addAttribute(STATUT, "Modification réussie");
+                model.addAttribute(STATUT, "updated");
 
                 return new ModelAndView(URL_REDIRECT, model);
             }
@@ -263,7 +263,7 @@ public class ControllerPagesCours {
 
         try {
             coursService.deleteCours(id);
-            model.addAttribute(STATUT, "Suppression réussie");
+            model.addAttribute(STATUT, "deleted");
 
             return new ModelAndView(URL_REDIRECT, model);
         }
@@ -280,8 +280,22 @@ public class ControllerPagesCours {
      * @return URI de la page.
      */
     @GetMapping("/prochainsCours")
-    public String prochainsCours(Model model) {
+    public String prochainsCours(
+            @RequestParam(required = false) String statut,
+            Model model) {
 
+        switch (statut) {
+            case "created":
+                model.addAttribute(STATUT, "Création réussie");
+                break;
+            case "updated":
+                model.addAttribute(STATUT, "Modification réussie");
+                break;
+            case "deleted":
+                model.addAttribute(STATUT, "Suppression réussie");
+                break;
+            default:
+        }
         try {
             ArrayList<Cours> listeCours = (ArrayList<Cours>) coursService.getProchainsCours();
 
