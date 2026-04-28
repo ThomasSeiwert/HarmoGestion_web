@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+
+<html lang="fr-FR" xmlns:th="http://www.thymeleaf.org">
+
+  <head th:replace="fragments/head :: head">
+    <title th:text="${titrePage}">HarmoGestion : Créer un cours</title>
+  </head>
+
+  <body>
+    <header th:replace="fragments/header :: header"></header>
+
+    <main class="container">
+      <!-- Titre -->
+      <h1 th:text="${titreFormulaire}">Enregistrer</h1>
+      <!-- Formulaire -->
+      <form action="#" th:action="${action}" th:object="${cours}" id="form-cours" method="post">
+        <!-- Message d'alerte -->
+        <div class="alert alert-danger" role="alert" th:text="${alert}" th:hidden="${alert == null}"></div>
+        <!-- Date du cours -->
+        <div class="mb-3">
+          <label class="form-label" for="date-cours">Date du cours</label>
+          <input class="form-control" id="date-cours" th:field="*{dateCours}"
+                 type="datetime-local" th:disabled="${nomSubmit == 'Supprimer'}" required>
+          <div class="invalid-feedback" th:text="${dateCoursErr}"></div>
+        </div>
+        <!-- Durée du cours -->
+        <div class="mb-3">
+          <label class="form-label" for="duree-cours">Durée du cours (en min)</label>
+          <input class="form-control" id="duree-cours" th:field="*{dureeCours}"
+                 type="number" th:disabled="${nomSubmit == 'Supprimer'}" required>
+          <div class="invalid-feedback" th:text="${dureeCoursErr}"></div>
+        </div>
+        <!-- Instrument enseigné -->
+        <div class="mb-3">
+          <label class="form-label" for="instrument">Instrument enseigné</label>
+          <select class="form-select" id="instrument" name="instrument"
+                  th:field="*{instrument.idInstrument}" data-placeholder="--Choisir--"
+                  th:disabled="${nomSubmit == 'Supprimer'}" required>
+            <option></option>
+            <option th:each="ins : ${instruments}" th:value="${ins.idInstrument}"
+                    th:text="${ins.libelleInstrument}">
+          </select>
+          <div class="invalid-feedback" th:text="${instrumentErr}"></div>
+        </div>
+        <!-- Enseignant -->
+        <div class="mb-3">
+          <label class="form-label" for="enseignant">Enseignant</label>
+          <select class="form-select" th:errorclass="is-invalid" id="enseignant" name="enseignant"
+                  th:field="*{enseignant.idMembre}" data-placeholder="--Choisir--"
+                  th:disabled="${nomSubmit == 'Supprimer'}" required>
+            <option></option>
+            <option th:each="membre : ${membres}" th:value="${membre.idMembre}"
+                    th:text="${membre.prenomMembre} + ' ' + ${membre.nomMembre}"
+                    >
+          </select>
+          <div class="invalid-feedback" th:text="${enseignantErr}"></div>
+        </div>
+        <!-- Participants -->
+        <div class="mb-3">
+          <label class="form-label" for="multiple-select-field">Participants</label>
+          <select class="form-select" id="multiple-select-field" name="participants"
+                  data-placeholder="--Choisir--" multiple th:disabled="${nomSubmit == 'Supprimer'}" required>
+            <option th:each="membre : ${membres}" th:value="${membre.idMembre}"
+                    th:text="${membre.prenomMembre} + ' ' + ${membre.nomMembre}"
+                    th:selected="${#lists.contains(idParticipants, membre.idMembre)}">
+          </select>
+          <div class="invalid-feedback" th:text="${participantsErr}"></div>
+        </div>
+        <!-- Id caché -->
+        <input type="hidden" th:field="*{idCours}">
+        <!-- Btn submit -->
+        <div>
+          <button class="btn btn-submit" type="submit" th:text="${nomSubmit}">Enregistrer</button>
+        </div>
+      </form>
+    </main>
+
+    <footer th:replace="fragments/footer :: footer"></footer>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.0/dist/jquery.slim.min.js"></script>
+    <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="/js/multiple-select.js"></script>
+  </body>
+
+</html>
