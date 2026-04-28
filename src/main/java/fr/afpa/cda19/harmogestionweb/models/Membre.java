@@ -1,5 +1,6 @@
 package fr.afpa.cda19.harmogestionweb.models;
 
+import fr.afpa.cda19.harmogestionweb.dto.MembreDto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -9,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -23,9 +25,9 @@ import java.util.List;
 @AllArgsConstructor
 public class Membre {
 
-    //--------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
     // Attributs
-    //--------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
 
     /**
      * Identifiant du membre.
@@ -70,4 +72,36 @@ public class Membre {
     @Size(max = 10, message = "Un membre peut apprendre au maximum"
             + " 10 instruments")
     private List<@Valid Instrument> instrumentsAppris;
+
+    //----------------------------------------------------------------------------------------------
+    // Attributs de classe
+    //----------------------------------------------------------------------------------------------
+
+    /**
+     * Comparator du membre par Nom.
+     */
+    public static final Comparator<Membre> COMPARATOR_NOM =
+            Comparator.comparing(Membre::getNomMembre);
+
+    //--------------------------------------------------------------------------
+    // Méthodes
+    //--------------------------------------------------------------------------
+
+    /**
+     * Méthode pour cloner un membre DTO en membre.
+     *
+     * @param membreDto membre à cloner.
+     *
+     * @return membre cloné.
+     */
+    public static Membre clone(final MembreDto membreDto) {
+
+        Membre membreClone = new Membre();
+        membreClone.setIdMembre(membreDto.getIdMembre());
+        membreClone.setNomMembre(membreDto.getNomMembre());
+        membreClone.setPrenomMembre(membreDto.getPrenomMembre());
+        membreClone.setDateInscriptionMembre(membreDto.getDateInscriptionMembre());
+
+        return membreClone;
+    }
 }
