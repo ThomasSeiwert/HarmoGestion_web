@@ -30,35 +30,17 @@ public final class RepositoryUtil<T> {
      * @throws RepositoryException si une action qui a échoué et qui nécessite
      *                             d'avertir l'utilisateur est survenue
      */
-    public T handleResponse(ResponseEntity<T> response) throws RepositoryException {
+    public T handleResponse(final ResponseEntity<T> response, final String message)
+            throws RepositoryException {
 
-        switch (response.getStatusCode()) {
-            case HttpStatus.OK, HttpStatus.CREATED:
-                return response.getBody();
-            case HttpStatus.FORBIDDEN, HttpStatus.NO_CONTENT:
-                if (response.getBody() != null) {
-                    throw new RepositoryException(response.getBody().toString());
-                } else {
-                    logError(response);
-                    throw new RepositoryRuntimeException("Une erreur est survenue");
-                }
-            default:
-                logError(response);
+        return switch (response.getStatusCode()) {
+            case HttpStatus.OK, HttpStatus.CREATED -> response.getBody();
+            case HttpStatus.FORBIDDEN, HttpStatus.NO_CONTENT ->
+                    throw new RepositoryException(message);
+            default -> {
+                log.error("Erreur lors de la requête vers l'api - " + response);
                 throw new RepositoryRuntimeException("Une erreur est survenue");
-        }
-    }
-
-    /**
-     * Méthode pour créer un log si une erreur est survenue.
-     *
-     * @param response réponse de l'API.
-     *
-     * @throws RepositoryRuntimeException si une erreur est survenue
-     */
-    private void logError(ResponseEntity<T> response)
-            throws RepositoryRuntimeException {
-
-        log.error("Erreur lors de la requête vers l'api - "
-                + response);
+            }
+        };
     }
 }

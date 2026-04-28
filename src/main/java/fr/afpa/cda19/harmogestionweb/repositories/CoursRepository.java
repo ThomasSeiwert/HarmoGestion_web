@@ -79,7 +79,8 @@ public class CoursRepository {
                 }
         );
         RepositoryUtil<Iterable<Cours>> repositoryUtil = new RepositoryUtil<>();
-        return repositoryUtil.handleResponse(response);
+        return repositoryUtil.handleResponse(response,
+                "Aucun cours prévu pour le moment");
     }
 
     /**
@@ -103,7 +104,7 @@ public class CoursRepository {
                 Cours.class
         );
         RepositoryUtil<Cours> repositoryUtil = new RepositoryUtil<>();
-        return repositoryUtil.handleResponse(response);
+        return repositoryUtil.handleResponse(response, null);
     }
 
     /**
@@ -128,7 +129,7 @@ public class CoursRepository {
                 Cours.class
         );
         RepositoryUtil<Cours> repositoryUtil = new RepositoryUtil<>();
-        return repositoryUtil.handleResponse(response);
+        return repositoryUtil.handleResponse(response, null);
     }
 
     /**
@@ -153,7 +154,7 @@ public class CoursRepository {
                 Cours.class
         );
         RepositoryUtil<Cours> repositoryUtil = new RepositoryUtil<>();
-        return repositoryUtil.handleResponse(response);
+        return repositoryUtil.handleResponse(response, null);
     }
 
     /**
@@ -175,6 +176,6 @@ public class CoursRepository {
                 Void.class
         );
         RepositoryUtil<Void> repositoryUtil = new RepositoryUtil<>();
-        repositoryUtil.handleResponse(response);
+        repositoryUtil.handleResponse(response, null);
     }
 }

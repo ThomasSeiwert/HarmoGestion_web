@@ -79,7 +79,7 @@ public class MembreRepository {
                 }
         );
         RepositoryUtil<Iterable<Membre>> repositoryUtil = new RepositoryUtil<>();
-        return repositoryUtil.handleResponse(response);
+        return repositoryUtil.handleResponse(response, "Aucun membre trouvé");
     }
 
     /**
@@ -103,7 +103,7 @@ public class MembreRepository {
                 Membre.class
         );
         RepositoryUtil<Membre> repositoryUtil = new RepositoryUtil<>();
-        return repositoryUtil.handleResponse(response);
+        return repositoryUtil.handleResponse(response, null);
     }
 
     /**
@@ -129,7 +129,7 @@ public class MembreRepository {
                 Membre.class
         );
         RepositoryUtil<Membre> repositoryUtil = new RepositoryUtil<>();
-        return repositoryUtil.handleResponse(response);
+        return repositoryUtil.handleResponse(response, null);
     }
 
     /**
@@ -155,7 +155,7 @@ public class MembreRepository {
                 Membre.class
         );
         RepositoryUtil<Membre> repositoryUtil = new RepositoryUtil<>();
-        return repositoryUtil.handleResponse(response);
+        return repositoryUtil.handleResponse(response, null);
     }
 
     /**
@@ -177,6 +177,7 @@ public class MembreRepository {
                 Void.class
         );
         RepositoryUtil<Void> repositoryUtil = new RepositoryUtil<>();
-        repositoryUtil.handleResponse(response);
+        repositoryUtil.handleResponse(response,
+                "Vous ne pouvez pas supprimer ce membre car il est utilisé");
     }
 }

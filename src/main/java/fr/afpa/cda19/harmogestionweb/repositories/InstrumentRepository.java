@@ -72,7 +72,7 @@ public class InstrumentRepository {
                 }
         );
         RepositoryUtil<Iterable<Instrument>> repositoryUtil = new RepositoryUtil<>();
-        return repositoryUtil.handleResponse(response);
+        return repositoryUtil.handleResponse(response, "Aucun instrument trouvé");
     }
 
     /**
@@ -96,7 +96,7 @@ public class InstrumentRepository {
                 Instrument.class
         );
         RepositoryUtil<Instrument> repositoryUtil = new RepositoryUtil<>();
-        return repositoryUtil.handleResponse(response);
+        return repositoryUtil.handleResponse(response, null);
     }
 
     /**
@@ -122,7 +122,8 @@ public class InstrumentRepository {
                 Instrument.class
         );
         RepositoryUtil<Instrument> repositoryUtil = new RepositoryUtil<>();
-        return repositoryUtil.handleResponse(response);
+        return repositoryUtil.handleResponse(response,
+                "Cet instrument existe déjà");
     }
 
     /**
@@ -148,7 +149,8 @@ public class InstrumentRepository {
                 Instrument.class
         );
         RepositoryUtil<Instrument> repositoryUtil = new RepositoryUtil<>();
-        return repositoryUtil.handleResponse(response);
+        return repositoryUtil.handleResponse(response,
+                "Cet instrument existe déjà");
     }
 
     /**
@@ -170,6 +172,7 @@ public class InstrumentRepository {
                 Void.class
         );
         RepositoryUtil<Void> repositoryUtil = new RepositoryUtil<>();
-        repositoryUtil.handleResponse(response);
+        repositoryUtil.handleResponse(response,
+                "Vous ne pouvez pas supprimer cet instrument car il est utilisé");
     }
 }
