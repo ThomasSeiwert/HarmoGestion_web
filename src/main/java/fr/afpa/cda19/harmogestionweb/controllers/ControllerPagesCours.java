@@ -394,7 +394,7 @@ public class ControllerPagesCours {
         model.addAttribute("cours", cours);
         model.addAttribute("idInstrument", idInstrument);
         model.addAttribute("idEnseignant", idEnseignant);
-        model.addAttribute("idParticipant", idParticipants);
+        model.addAttribute("idParticipants", idParticipants);
     }
 
     /**
