@@ -1,5 +1,6 @@
 package fr.afpa.cda19.harmogestionweb.models;
 
+import fr.afpa.cda19.harmogestionweb.dto.CoursDto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.Max;
@@ -74,7 +75,7 @@ public class Cours {
     private List<@Valid Membre> participants;
 
     //--------------------------------------------------------------------------
-    // Attributs
+    // Attributs de classe
     //--------------------------------------------------------------------------
 
     /**
@@ -82,4 +83,25 @@ public class Cours {
      */
     public static final Comparator<Cours> COMPARATOR_DATE =
             Comparator.comparing(Cours::getDateCours);
+
+    //--------------------------------------------------------------------------
+    // Méthodes
+    //--------------------------------------------------------------------------
+
+    /**
+     * Méthode pour cloner un cours DTO en cours.
+     *
+     * @param coursDTO cours à cloner.
+     *
+     * @return cours cloné.
+     */
+    public static Cours clone(final CoursDto coursDTO) {
+
+        Cours coursClone = new Cours();
+        coursClone.setIdCours(coursDTO.getIdCours());
+        coursClone.setDateCours(coursDTO.getDateCours());
+        coursClone.setDureeCours(coursDTO.getDureeCours());
+
+        return coursClone;
+    }
 }
