@@ -145,7 +145,7 @@ public class MembreRepository {
     public Membre updateMembre(final Membre membre)
             throws RepositoryException {
 
-        String url = baseApiUrl + membreURI;
+        String url = baseApiUrl + membreURI + "/" + membre.getIdMembre();
         RestTemplate restTemplate = new RestTemplate();
         HttpEntity<Membre> request = new HttpEntity<>(membre);
         ResponseEntity<Membre> response = restTemplate.exchange(

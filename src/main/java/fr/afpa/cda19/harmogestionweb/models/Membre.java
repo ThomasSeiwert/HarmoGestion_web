@@ -9,6 +9,8 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
@@ -57,6 +59,7 @@ public class Membre {
      */
     @NotNull(message = "Un membre doit avoir une date d'inscription.")
     @PastOrPresent(message = "Une date d'inscription ne peut pas être future.")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateInscriptionMembre;
 
     /**

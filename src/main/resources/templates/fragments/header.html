@@ -14,21 +14,20 @@
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <!-- Membres-->
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">Membres</a>
+              <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false"
+                 th:text="#{titre.membres}"></a>
               <ul class="dropdown-menu burger-ecf">
                 <li>
-                  <a class="nav-link" th:href="@{/listeMembres}">Liste des Membres</a>
+                  <a class="nav-link" th:href="@{/listeMembres}" th:text="#{titre.listeMembres}"></a>
                 </li>
                 <li>
-                  <a class="nav-link" th:href="@{/ficheMembre}">Fiche de membre</a>
-                </li>
-                <li>
-                  <a class="nav-link" th:href="@{/inscriptionMembre}">Inscription d'un membre</a>
+                  <a class="nav-link" th:href="@{/creerMembre}" th:text="#{titre.creerMembre}"></a>
                 </li>
               </ul>
             </li>
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">Cours</a>
+              <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false"
+                 th:text="#{titre.cours}"></a>
               <ul class="dropdown-menu burger-ecf">
                 <li>
                   <a class="nav-link" th:href="@{/creerCours}" th:text="#{titre.creerCours}"></a>
@@ -41,25 +40,26 @@
               </ul>
             </li>
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">Représentations</a>
+              <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false"
+                 th:text="#{titre.representations}"></a>
               <ul class="dropdown-menu burger-ecf">
                 <li>
-                  <a class="nav-link" th:href="@{/planifierRepresentation}">Planifier une représentation</a>
+                  <a class="nav-link" th:href="@{/planifierRepresentation}" th:text="#{titre.planifierRepresentation}"></a>
                 </li>
                 <li>
-                  <a class="nav-link" th:href="@{/prochainesRepresentations}">Prochaines représentations</a>
+                  <a class="nav-link" th:href="@{/prochainesRepresentations}" th:text="#{titre.prochainesRepresentations}"></a>
                 </li>
               </ul>
             </li>
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"
-                 aria-expanded="false">Instruments</a>
+              <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false"
+                 th:text="#{titre.instruments}"></a>
               <ul class="dropdown-menu burger-ecf">
                 <li>
-                  <a class="nav-link" th:href="@{/ajouterInstrument}">Ajouter un instrument</a>
+                  <a class="nav-link" th:href="@{/ajouterInstrument}" th:text="#{titre.ajouterInstrument}"></a>
                 </li>
                 <li>
-                  <a class="nav-link" th:href="@{/listeInstruments}">Liste des instruments</a>
+                  <a class="nav-link" th:href="@{/listeInstruments}" th:text="#{titre.listeInstruments}"></a>
                 </li>
               </ul>
             </li>

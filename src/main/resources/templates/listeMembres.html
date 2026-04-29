@@ -1,33 +1,40 @@
 <!DOCTYPE html>
-<html lang="Fr-fr" xmlns:th="http://www.thymeleaf.org">
-  <head th:replace="~{fragments/head :: head}">
-    <title th:text="${titrePage}">HarmoGestion : Liste des membres</title>
-  </head>
-  <body>
-    <header th:replace="fragments/header :: header"></header>
-    <main class="container">
-      <h1 th:text="#{titre.listeMembres}"></h1>
-      <table>
-        <thead>
-        <tr>
-          <th th:text="#{membre.nom}"></th>
-          <th th:text="#{membre.prenom}"></th>
-          <th th:text="#{membre.date}"></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:if="${#lists.isEmpty(listeMembres)}">
-          <td colspan="3" th:text="#{donnee.absente}"></td>
-        </tr>
-        <tr th:each="membreActif : ${listeMembres}">
-          <td th:text="${membreActif?.nomMembre}"></td>
-          <td th:text="${membreActif?.prenomMembre}"></td>
-          <td th:text="${membreActif?.dateInscriptionMembre}"></td>
-        </tr>
-        </tbody>
-      </table>
-    </main>
-    <footer th:replace="~{fragments/footer :: footer}"></footer>
-    <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
-  </body>
-</html>
+<html lang="fr-FR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head}">
+  <title th:text="${titrePage}">HarmoGestion</title>
+</head>
+<body>
+<header th:replace="~{fragments/header :: header}"></header>
+<main class="container">
+  <h1 class="mb-3">Liste des membres</h1>
+  <div class="d-flex justify-content-center mb-3">
+    <a class="btn plain-primary" th:href="@{/creerMembre}">Ajouter Un Membre</a>
+  </div>
+  <table id="liste-membres">
+    <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Nom</th>
+      <th scope="col">Prénom</th>
+      <th scope="col">Date d'inscription</th>
+      <th scope="col">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="membre, iStat : ${membres}">
+      <th class="ps-2" scope="row" th:text="${iStat.index+1}"></th>
+      <td th:text="${membre.nomMembre}"></td>
+      <td th:text="${membre.prenomMembre}"></td>
+      <td th:date="${membre.dateInscriptionMembre}"></td>
+      <td class="d-flex flex-column flex-lg-row gap-4 gap-lg-3 my-4 my-lg-0">
+        <a th:href="${'/modifierMembre/'}+${membre.idMembre}"
+           class="btn primary">Modifier</a>
+        <a th:href="${'/supprimerMembre/'}+${membre.idMembre}" class="btn danger">Supprimer</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</main>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+<script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
+</body>

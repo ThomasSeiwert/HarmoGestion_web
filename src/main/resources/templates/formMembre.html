@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+
+<html lang="fr-FR" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/head :: head">
+  <title th:text="${titrePage}">HarmoGestion : Créer un Membre</title>
+</head>
+
+<body>
+<header th:replace="fragments/header :: header"></header>
+
+<main class="container">
+  <!-- Titre -->
+  <h1 th:text="${titreFormulaire}">Enregistrer</h1>
+  <!-- Formulaire -->
+  <form action="#" th:action="${action}" th:object="${membre}" id="form-cours" method="post">
+    <!-- Message d'alerte -->
+    <div class="alert alert-danger" role="alert" th:text="${alert}" th:hidden="${alert == null}"></div>
+    <!-- Nom du membre -->
+    <div class="mb-3">
+      <label class="form-label" for="nom-membre">Nom</label>
+      <input class="form-control" id="nom-membre" th:field="*{nomMembre}"
+             type="text" th:disabled="${nomSubmit == 'Supprimer'}" required>
+      <div class="message-erreur" th:text="${nomMembreErr}"></div>
+    </div>
+    <!-- Prénom du membre -->
+    <div class="mb-3">
+      <label class="form-label" for="prenom-membre">Prénom</label>
+      <input class="form-control" id="prenom-membre" th:field="*{prenomMembre}"
+             type="text" th:disabled="${nomSubmit == 'Supprimer'}" required>
+      <div class="message-erreur" th:text="${prenomMembreErr}"></div>
+    </div>
+    <!-- Date d'inscription -->
+    <div class="mb-3">
+      <label class="form-label" for="date-inscription">Date d'inscription</label>
+      <input class="form-control" id="date-inscription" th:field="*{dateInscriptionMembre}"
+             type="date" th:disabled="${nomSubmit == 'Supprimer'}" required>
+      <div class="message-erreur" th:text="${dateInscriptionMembreErr}"></div>
+    </div>
+    <!-- Instruments maitrisés -->
+    <div class="mb-3">
+      <label class="form-label" for="instruments-maitrises">Instruments maitrisés</label>
+      <select class="form-select" id="instruments-maitrises" name="idInsMaitrises"
+              data-placeholder="--Choisir--" multiple th:disabled="${nomSubmit == 'Supprimer'}">
+        <option th:each="ins : ${instruments}" th:value="${ins.idInstrument}"
+                th:text="${ins.libelleInstrument}"
+                th:selected="${#lists.contains(idInsMaitrises, ins.idInstrument)}">
+      </select>
+      <div class="message-erreur" th:text="${instrumentsMaitrisesErr}"></div>
+    </div>
+    <!-- Instruments appris -->
+    <div class="mb-3">
+      <label class="form-label" for="instruments-appris">Instruments appris</label>
+      <select class="form-select" id="instruments-appris" name="idInsAppris"
+              data-placeholder="--Choisir--" multiple th:disabled="${nomSubmit == 'Supprimer'}">
+        <option th:each="ins : ${instruments}" th:value="${ins.idInstrument}"
+                th:text="${ins.libelleInstrument}"
+                th:selected="${#lists.contains(idInsAppris, ins.idInstrument)}">
+      </select>
+      <div class="message-erreur" th:text="${instrumentsApprisErr}"></div>
+    </div>
+    <!-- Id caché -->
+    <input type="hidden" th:field="*{idMembre}">
+    <!-- Btn submit -->
+    <div>
+      <button class="btn btn-submit" type="submit" th:text="${nomSubmit}">Enregistrer</button>
+    </div>
+  </form>
+</main>
+
+<footer th:replace="fragments/footer :: footer"></footer>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.0/dist/jquery.slim.min.js"></script>
+<script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="/js/formMembre.js"></script>
+</body>
+
+</html>
