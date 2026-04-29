@@ -109,32 +109,3 @@ CREATE TABLE `instruments_representation`(
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 COMMIT;
-
-USE harmogestion;
-
---
--- Données de la table `Instrument`
---
-INSERT INTO instrument (libelle_instrument)
-VALUES ('guitare');
-
---
--- Données de la table `Membre`
---
-INSERT INTO membre (nom_membre, prenom_membre, date_inscription_membre)
-VALUES ('Hendrix', 'Jimmi', '2026-04-12'),
-       ('Seiwert', 'Thomas', '2026-04-14'),
-       ('Didier', 'Cédric', '2026-04-15');
-
---
--- Données de la table `Cours`
---
-INSERT INTO cours (date_cours, duree_cours, id_instrument, id_membre_enseignant)
-VALUES (DATE_ADD(NOW(), INTERVAL 1 DAY), 45, 1, 1);
-
---
--- Données de la table `Participer_Cours`
---
-INSERT INTO participer_cours (id_membre_apprenant, id_cours)
-VALUES (2,1),
-       (3,1);

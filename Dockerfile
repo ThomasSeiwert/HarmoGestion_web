@@ -5,6 +5,6 @@ WORKDIR /app
 
 EXPOSE 9005
 
-COPY harmoGestionWeb-0.0.1-SNAPSHOT.jar /app/harmoGestionWeb.jar
+COPY target/harmoGestionWeb-0.0.1-SNAPSHOT.jar /app/harmoGestionWeb.jar
 
 ENTRYPOINT ["java", "-jar", "/app/harmoGestionWeb.jar"]
