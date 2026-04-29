@@ -18,9 +18,9 @@
     <a class="btn plain-primary" th:href="@{/ajouterInstrument}">Ajouter Un Instrument</a>
   </div>
   <!-- Message si aucun instrument -->
-  <div th:if="${aucunInstrment} != null" th:text="${aucunInstrument}"></div>
+  <div th:if="${aucunInstrument} != null" th:text="${aucunInstrument}"></div>
   <!-- Liste des instruments -->
-  <table id="liste-instruments">
+  <table th:unless="${aucunInstrument} != null" id="liste-instruments">
     <thead>
     <tr>
       <th scope="col">#</th>

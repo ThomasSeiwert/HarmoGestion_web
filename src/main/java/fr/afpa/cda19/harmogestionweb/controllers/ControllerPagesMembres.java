@@ -6,6 +6,7 @@ import fr.afpa.cda19.harmogestionweb.models.Instrument;
 import fr.afpa.cda19.harmogestionweb.models.Membre;
 import fr.afpa.cda19.harmogestionweb.services.InstrumentService;
 import fr.afpa.cda19.harmogestionweb.services.MembreService;
+import fr.afpa.cda19.harmogestionweb.utilities.ControllerUtil;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -255,20 +256,7 @@ public class ControllerPagesMembres {
             @RequestParam(required = false) Optional<String> statut,
             Model model) {
 
-        if (statut.isPresent()) {
-            switch (statut.get()) {
-                case "created":
-                    model.addAttribute(STATUT, "Création réussie");
-                    break;
-                case "updated":
-                    model.addAttribute(STATUT, "Modification réussie");
-                    break;
-                case "deleted":
-                    model.addAttribute(STATUT, "Suppression réussie");
-                    break;
-                default:
-            }
-        }
+        statut.ifPresent(string -> ControllerUtil.setStatus(string, model));
         try {
             ArrayList<Membre> listeMembres = (ArrayList<Membre>) membreService.getMembres();
 

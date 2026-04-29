@@ -1,9 +1,9 @@
 package fr.afpa.cda19.harmogestionweb.controllers;
 
-import fr.afpa.cda19.harmogestionweb.exceptions.ControllerException;
 import fr.afpa.cda19.harmogestionweb.exceptions.RepositoryException;
 import fr.afpa.cda19.harmogestionweb.models.Instrument;
 import fr.afpa.cda19.harmogestionweb.services.InstrumentService;
+import fr.afpa.cda19.harmogestionweb.utilities.ControllerUtil;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -260,28 +261,20 @@ public class ControllerPagesInstruments {
             @RequestParam(required = false) Optional<String> statut,
             final Model model) {
 
-        if (statut.isPresent()) {
-            switch (statut.get()) {
-                case "created":
-                    model.addAttribute(STATUT, "Création réussie");
-                    break;
-                case "updated":
-                    model.addAttribute(STATUT, "Modification réussie");
-                    break;
-                case "deleted":
-                    model.addAttribute(STATUT, "Suppression réussie");
-                    break;
-                default:
-            }
-        }
+        statut.ifPresent(string -> ControllerUtil.setStatus(string, model));
         try {
-            model.addAttribute("instruments", service.getInstruments());
-            model.addAttribute(TITRE_PAGE_PARAM, "Liste des instruments");
-            return "listeInstruments";
+            ArrayList<Instrument> instruments = (ArrayList<Instrument>) service.getInstruments();
+
+            // si un instrument a été trouvé, on affiche la liste des instruments
+            model.addAttribute("instruments", instruments);
         }
-        catch (RepositoryException _) {
-            throw new ControllerException("Erreur inconnue");
+        catch (RepositoryException re) {
+            // si aucun membre n'a été trouvé, on affiche un message
+            model.addAttribute("aucunInstrument", re.getMessage());
         }
+        model.addAttribute(TITRE_PAGE_PARAM, "Liste des instruments");
+
+        return "listeInstruments";
     }
 
     /**
