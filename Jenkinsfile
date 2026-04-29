@@ -40,7 +40,7 @@ pipeline {
         stage('Push image to Docker Hub') {
             steps {
                 script {
-                    docker.withRegistery('', 'Docker Account') {
+                    docker.withRegistry('', 'Docker Account') {
                         docker.image('cvert/harmogestion-web:latest').push()
                     }
                 }
