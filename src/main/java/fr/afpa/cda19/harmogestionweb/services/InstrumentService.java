@@ -66,10 +66,8 @@ public class InstrumentService {
      *
      * @return l'instrument correspondant à l'id
      *
-     * @throws RepositoryException si une action qui a échoué et qui nécessite
-     *                             d'avertir l'utilisateur est survenue
      */
-    public Instrument getInstrument(final int id) throws RepositoryException {
+    public Instrument getInstrument(final int id) {
 
         return instrumentRepository.getInstrument(id);
     }

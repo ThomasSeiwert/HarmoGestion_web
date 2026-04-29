@@ -3,7 +3,6 @@ package fr.afpa.cda19.harmogestionweb.repositories;
 import fr.afpa.cda19.harmogestionweb.exceptions.RepositoryException;
 import fr.afpa.cda19.harmogestionweb.models.Cours;
 import fr.afpa.cda19.harmogestionweb.utilities.CustomProperties;
-import fr.afpa.cda19.harmogestionweb.utilities.RepositoryUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -12,6 +11,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -62,25 +62,27 @@ public class CoursRepository {
     /**
      * Envoi à l'api d'une requête pour récupérer les prochains cours.
      *
-     * @return la liste des prochains cours, ou null si aucun cours trouvé.
+     * @return la liste des prochains cours
      *
-     * @throws RepositoryException si une action qui a échoué et qui nécessite
-     *                             d'avertir l'utilisateur est survenue
+     * @throws RepositoryException si aucun cours trouvé
      */
     public Iterable<Cours> getProchainsCours() throws RepositoryException {
 
-        String url = baseApiUrl + coursURI;
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<Iterable<Cours>> response = restTemplate.exchange(
-                url,
-                HttpMethod.GET,
-                null,
-                new ParameterizedTypeReference<>() {
-                }
-        );
-        RepositoryUtil<Iterable<Cours>> repositoryUtil = new RepositoryUtil<>();
-        return repositoryUtil.handleResponse(response,
-                "Aucun cours prévu pour le moment");
+        try {
+            String url = baseApiUrl + coursURI;
+            RestTemplate restTemplate = new RestTemplate();
+            ResponseEntity<Iterable<Cours>> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.GET,
+                    null,
+                    new ParameterizedTypeReference<>() {
+                    }
+            );
+            return response.getBody();
+        }
+        catch (HttpClientErrorException hcee) {
+            throw new RepositoryException(hcee.getResponseBodyAsString());
+        }
     }
 
     /**
@@ -90,10 +92,8 @@ public class CoursRepository {
      *
      * @return le cours correspondant à l'id
      *
-     * @throws RepositoryException si une action qui a échoué et qui nécessite
-     *                             d'avertir l'utilisateur est survenue
      */
-    public Cours getCours(final int id) throws RepositoryException {
+    public Cours getCours(final int id) {
 
         String url = baseApiUrl + coursURI + "/" + id;
         RestTemplate restTemplate = new RestTemplate();
@@ -103,8 +103,7 @@ public class CoursRepository {
                 null,
                 Cours.class
         );
-        RepositoryUtil<Cours> repositoryUtil = new RepositoryUtil<>();
-        return repositoryUtil.handleResponse(response, null);
+        return response.getBody();
     }
 
     /**
@@ -114,10 +113,8 @@ public class CoursRepository {
      *
      * @return le cours créé
      *
-     * @throws RepositoryException si une action qui a échoué et qui nécessite
-     *                             d'avertir l'utilisateur est survenue
      */
-    public Cours createCours(final Cours cours) throws RepositoryException {
+    public Cours createCours(final Cours cours) {
 
         String url = baseApiUrl + coursURI;
         RestTemplate restTemplate = new RestTemplate();
@@ -128,8 +125,7 @@ public class CoursRepository {
                 request,
                 Cours.class
         );
-        RepositoryUtil<Cours> repositoryUtil = new RepositoryUtil<>();
-        return repositoryUtil.handleResponse(response, null);
+       return response.getBody();
     }
 
     /**
@@ -139,10 +135,8 @@ public class CoursRepository {
      *
      * @return le cours modifié
      *
-     * @throws RepositoryException si une action qui a échoué et qui nécessite
-     *                             d'avertir l'utilisateur est survenue
      */
-    public Cours updateCours(final Cours cours) throws RepositoryException {
+    public Cours updateCours(final Cours cours) {
 
         String url = baseApiUrl + coursURI + "/" + cours.getIdCours();
         RestTemplate restTemplate = new RestTemplate();
@@ -153,8 +147,7 @@ public class CoursRepository {
                 request,
                 Cours.class
         );
-        RepositoryUtil<Cours> repositoryUtil = new RepositoryUtil<>();
-        return repositoryUtil.handleResponse(response, null);
+        return response.getBody();
     }
 
     /**
@@ -162,20 +155,16 @@ public class CoursRepository {
      *
      * @param id identifiant du cours à supprimer
      *
-     * @throws RepositoryException si une action qui a échoué et qui nécessite
-     *                             d'avertir l'utilisateur est survenue
      */
-    public void deleteCours(final int id) throws RepositoryException {
+    public void deleteCours(final int id) {
 
         String url = baseApiUrl + coursURI + "/" + id;
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<Void> response = restTemplate.exchange(
+        restTemplate.exchange(
                 url,
                 HttpMethod.DELETE,
                 null,
                 Void.class
         );
-        RepositoryUtil<Void> repositoryUtil = new RepositoryUtil<>();
-        repositoryUtil.handleResponse(response, null);
     }
 }

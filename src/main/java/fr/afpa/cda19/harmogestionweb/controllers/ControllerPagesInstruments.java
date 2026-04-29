@@ -14,10 +14,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Classe de controller liée aux instruments.
@@ -73,6 +75,11 @@ public class ControllerPagesInstruments {
      * Nom de l'attribut alert.
      */
     public static final String ALERT = "alert";
+
+    /**
+     * Nom de l'attribut statut.
+     */
+    public static final String STATUT = "statut";
 
     /**
      * Service faisant le lien entre le contrôleur et le repository.
@@ -135,7 +142,9 @@ public class ControllerPagesInstruments {
         }
         try {
             service.saveInstrument(instrument);
-            return new ModelAndView(URL_REDIRECTION);
+            ModelAndView model = new ModelAndView(URL_REDIRECTION);
+            model.addObject(STATUT, "created");
+            return model;
         }
         catch (RepositoryException re) {
             ModelAndView modelView = new ModelAndView(NOM_FORM_VUE);
@@ -158,15 +167,11 @@ public class ControllerPagesInstruments {
     public String envoyerFormulaireModificationInstrument(
             @PathVariable final Integer id, final Model model) {
 
-        try {
-            model.mergeAttributes(getParamsFormModification(id));
-            Instrument instrument = service.getInstrument(id);
-            model.addAttribute(NOM_MODEL_PARAM, instrument);
-            return NOM_FORM_VUE;
-        }
-        catch (RepositoryException _) {
-            throw new ControllerException("Erreur inconnue");
-        }
+        model.mergeAttributes(getParamsFormModification(id));
+        Instrument instrument = service.getInstrument(id);
+        model.addAttribute(NOM_MODEL_PARAM, instrument);
+
+        return NOM_FORM_VUE;
     }
 
     /**
@@ -193,7 +198,9 @@ public class ControllerPagesInstruments {
         }
         try {
             service.saveInstrument(instrument);
-            return new ModelAndView(URL_REDIRECTION);
+            ModelAndView model = new ModelAndView(URL_REDIRECTION);
+            model.addObject(STATUT, "updated");
+            return model;
         }
         catch (RepositoryException re) {
             ModelAndView modelView = new ModelAndView(NOM_FORM_VUE);
@@ -215,15 +222,10 @@ public class ControllerPagesInstruments {
     public String envoyerFormulaireSuppressionInstrument(
             @PathVariable final Integer id, final Model model) {
 
-        try {
-            model.mergeAttributes(getParamsFormSuppression(id));
-            Instrument instrument = service.getInstrument(id);
-            model.addAttribute(NOM_MODEL_PARAM, instrument);
-            return NOM_FORM_VUE;
-        }
-        catch (RepositoryException _) {
-            throw new ControllerException("Erreur inconnue");
-        }
+        model.mergeAttributes(getParamsFormSuppression(id));
+        Instrument instrument = service.getInstrument(id);
+        model.addAttribute(NOM_MODEL_PARAM, instrument);
+        return NOM_FORM_VUE;
     }
 
     /**
@@ -241,7 +243,9 @@ public class ControllerPagesInstruments {
 
         try {
             service.deleteInstrument(id);
-            return new ModelAndView(URL_REDIRECTION);
+            ModelAndView model = new ModelAndView(URL_REDIRECTION);
+            model.addObject(STATUT, "deleted");
+            return model;
         }
         catch (RepositoryException re) {
             ModelAndView modelView = new ModelAndView(NOM_FORM_VUE);
@@ -252,8 +256,24 @@ public class ControllerPagesInstruments {
     }
 
     @GetMapping("/listeInstruments")
-    public String listerInstruments(final Model model) {
+    public String listerInstruments(
+            @RequestParam(required = false) Optional<String> statut,
+            final Model model) {
 
+        if (statut.isPresent()) {
+            switch (statut.get()) {
+                case "created":
+                    model.addAttribute(STATUT, "Création réussie");
+                    break;
+                case "updated":
+                    model.addAttribute(STATUT, "Modification réussie");
+                    break;
+                case "deleted":
+                    model.addAttribute(STATUT, "Suppression réussie");
+                    break;
+                default:
+            }
+        }
         try {
             model.addAttribute("instruments", service.getInstruments());
             model.addAttribute(TITRE_PAGE_PARAM, "Liste des instruments");

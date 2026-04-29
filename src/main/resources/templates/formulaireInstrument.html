@@ -1,27 +1,45 @@
 <!DOCTYPE html>
 <html lang="fr-FR" xmlns:th="http://www.thymeleaf.org">
-  <head th:replace="~{fragments/head :: head}">
-    <title th:text="${titrePage}">HarmoGestion : Ajout d'un instrument</title>
-  </head>
-  <body>
-    <header th:replace="~{fragments/header :: header}"></header>
-    <main class="container">
-      <h1 th:text="${titreFormulaire}">Ajouter</h1>
-      <form action="#" th:action="${action}" th:object="${instrument}" id="form-instrument" method="post">
-        <div class="mb-3">
-          <label class="form-label" for="nom-instrument">Nom de l'instrument</label>
-          <input class="form-control" th:errorclass="is-invalid" id="nom-instrument" th:field="*{libelleInstrument}"
-                 required type="text" th:readonly="${nomSubmit=='Supprimer'}">
-          <div class="invalid-feedback" th:errors="*{libelleInstrument}"></div>
-        </div>
-        <input type="hidden" th:field="*{idInstrument}">
-        <div>
-          <button th:if="${nomSubmit=='Supprimer'}" class="btn plain-danger" type="submit" th:text="${nomSubmit}">Enregistrer</button>
-          <button th:unless="${nomSubmit=='Supprimer'}" class="btn btn-submit" type="submit" th:text="${nomSubmit}">Enregistrer</button>
-        </div>
-      </form>
-    </main>
-    <footer th:replace="~{fragments/footer :: footer}"></footer>
-    <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
-  </body>
+
+<head th:replace="~{fragments/head :: head}">
+  <title th:text="${titrePage}">HarmoGestion : Ajout d'un instrument</title>
+</head>
+
+<body>
+<header th:replace="~{fragments/header :: header}"></header>
+
+<main class="container">
+  <!-- Titre -->
+  <h1 th:text="${titreFormulaire}">Ajouter</h1>
+  <!-- Formulaire -->
+  <form action="#" th:action="${action}" th:object="${instrument}" id="form-instrument"
+        method="post">
+    <!-- Message d'alerte -->
+    <div class="alert alert-danger" role="alert" th:text="${alert}"
+         th:hidden="${alert == null}"></div>
+    <!-- Nom -->
+    <div class="mb-3">
+      <label class="form-label" for="nom-instrument">Nom de l'instrument</label>
+      <input class="form-control" th:errorclass="is-invalid" id="nom-instrument"
+             th:field="*{libelleInstrument}"
+             required type="text" th:readonly="${nomSubmit=='Supprimer'}">
+      <div class="invalid-feedback" th:errors="*{libelleInstrument}"></div>
+    </div>
+    <!-- Id caché -->
+    <input type="hidden" th:field="*{idInstrument}">
+    <!-- Submit -->
+    <div>
+      <button th:if="${nomSubmit=='Supprimer'}" class="btn plain-danger" type="submit"
+              th:text="${nomSubmit}">Enregistrer
+      </button>
+      <button th:unless="${nomSubmit=='Supprimer'}" class="btn btn-submit" type="submit"
+              th:text="${nomSubmit}">Enregistrer
+      </button>
+    </div>
+  </form>
+</main>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+<script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
+</body>
 </html>

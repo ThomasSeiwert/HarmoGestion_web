@@ -66,10 +66,8 @@ public class CoursService {
      *
      * @return le cours correspondant à l'id
      *
-     * @throws RepositoryException si une action qui a échoué et qui nécessite
-     *                             d'avertir l'utilisateur est survenue
      */
-    public Cours getCours(final int id) throws RepositoryException {
+    public Cours getCours(final int id) {
 
         return coursRepository.getCours(id);
     }
@@ -81,10 +79,8 @@ public class CoursService {
      *
      * @return le cours créé ou modifié
      *
-     * @throws RepositoryException si une action qui a échoué et qui nécessite
-     *                             d'avertir l'utilisateur est survenue
      */
-    public Cours saveCours(final Cours cours) throws RepositoryException {
+    public Cours saveCours(final Cours cours) {
 
         if (cours.getIdCours() == null) {
             return coursRepository.createCours(cours);
@@ -98,10 +94,8 @@ public class CoursService {
      *
      * @param id identifiant du cours à supprimer
      *
-     * @throws RepositoryException si une action qui a échoué et qui nécessite
-     *                             d'avertir l'utilisateur est survenue
      */
-    public void deleteCours(final int id) throws RepositoryException {
+    public void deleteCours(final int id) {
 
         coursRepository.deleteCours(id);
     }

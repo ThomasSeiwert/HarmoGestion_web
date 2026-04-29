@@ -1,7 +1,6 @@
 package fr.afpa.cda19.harmogestionweb.controllers;
 
 import fr.afpa.cda19.harmogestionweb.dto.MembreDto;
-import fr.afpa.cda19.harmogestionweb.exceptions.ControllerException;
 import fr.afpa.cda19.harmogestionweb.exceptions.RepositoryException;
 import fr.afpa.cda19.harmogestionweb.models.Instrument;
 import fr.afpa.cda19.harmogestionweb.models.Membre;
@@ -86,14 +85,9 @@ public class ControllerPagesMembres {
     @GetMapping("/creerMembre")
     public String creerMembreGet(ModelMap model) {
 
-        try {
-            setAttributsCreation(model, new Membre(), new ArrayList<>(), new ArrayList<>());
+        setAttributsCreation(model, new Membre(), new ArrayList<>(), new ArrayList<>());
 
-            return FORM_MEMBRE;
-        }
-        catch (RepositoryException _) {
-            throw new ControllerException("Erreur inconnue");
-        }
+        return FORM_MEMBRE;
     }
 
     /**
@@ -113,32 +107,27 @@ public class ControllerPagesMembres {
             @ModelAttribute final MembreDto membreDto,
             ModelMap model) {
 
-        try {
-            if (idInsMaitrises == null) {
-                idInsMaitrises = new ArrayList<>();
-            }
-            if (idInsAppris == null) {
-                idInsAppris = new ArrayList<>();
-            }
-            Membre membre = completerMembre(membreDto, idInsMaitrises, idInsAppris);
-
-            Set<ConstraintViolation<Membre>> erreurs = getErreurs(membre);
-            setMessagesErreur(erreurs, model);
-
-            if (!erreurs.isEmpty()) {
-                setAttributsCreation(model, membre, idInsMaitrises, idInsAppris);
-
-                return new ModelAndView(FORM_MEMBRE, model);
-            }
-            else {
-                membreService.saveMembre(membre);
-                model.addAttribute(STATUT, "created");
-
-                return new ModelAndView(URL_REDIRECT, model);
-            }
+        if (idInsMaitrises == null) {
+            idInsMaitrises = new ArrayList<>();
         }
-        catch (RepositoryException _) {
-            throw new ControllerException("Erreur inconnue");
+        if (idInsAppris == null) {
+            idInsAppris = new ArrayList<>();
+        }
+        Membre membre = completerMembre(membreDto, idInsMaitrises, idInsAppris);
+
+        Set<ConstraintViolation<Membre>> erreurs = getErreurs(membre);
+        setMessagesErreur(erreurs, model);
+
+        if (!erreurs.isEmpty()) {
+            setAttributsCreation(model, membre, idInsMaitrises, idInsAppris);
+
+            return new ModelAndView(FORM_MEMBRE, model);
+        }
+        else {
+            membreService.saveMembre(membre);
+            model.addAttribute(STATUT, "created");
+
+            return new ModelAndView(URL_REDIRECT, model);
         }
     }
 
@@ -155,16 +144,11 @@ public class ControllerPagesMembres {
             @PathVariable final int id,
             ModelMap model) {
 
-        try {
-            Membre membre = membreService.getMembre(id);
-            setAttributsModification(model, membre, getIdInsMaitrises(membre),
-                    getIdInsAppris(membre), id);
+        Membre membre = membreService.getMembre(id);
+        setAttributsModification(model, membre, getIdInsMaitrises(membre),
+                getIdInsAppris(membre), id);
 
-            return FORM_MEMBRE;
-        }
-        catch (RepositoryException _) {
-            throw new ControllerException("Erreur inconnue");
-        }
+        return FORM_MEMBRE;
     }
 
     /**
@@ -186,32 +170,27 @@ public class ControllerPagesMembres {
             @ModelAttribute final MembreDto membreDto,
             ModelMap model) {
 
-        try {
-            if (idInsMaitrises == null) {
-                idInsMaitrises = new ArrayList<>();
-            }
-            if (idInsAppris == null) {
-                idInsAppris = new ArrayList<>();
-            }
-            Membre membre = completerMembre(membreDto, idInsMaitrises, idInsAppris);
-
-            Set<ConstraintViolation<Membre>> erreurs = getErreurs(membre);
-            setMessagesErreur(erreurs, model);
-
-            if (!erreurs.isEmpty()) {
-                setAttributsModification(model, membre, idInsMaitrises, idInsAppris, id);
-
-                return new ModelAndView(FORM_MEMBRE, model);
-            }
-            else {
-                membreService.saveMembre(membre);
-                model.addAttribute(STATUT, "updated");
-
-                return new ModelAndView(URL_REDIRECT, model);
-            }
+        if (idInsMaitrises == null) {
+            idInsMaitrises = new ArrayList<>();
         }
-        catch (RepositoryException _) {
-            throw new ControllerException("Erreur inconnue");
+        if (idInsAppris == null) {
+            idInsAppris = new ArrayList<>();
+        }
+        Membre membre = completerMembre(membreDto, idInsMaitrises, idInsAppris);
+
+        Set<ConstraintViolation<Membre>> erreurs = getErreurs(membre);
+        setMessagesErreur(erreurs, model);
+
+        if (!erreurs.isEmpty()) {
+            setAttributsModification(model, membre, idInsMaitrises, idInsAppris, id);
+
+            return new ModelAndView(FORM_MEMBRE, model);
+        }
+        else {
+            membreService.saveMembre(membre);
+            model.addAttribute(STATUT, "updated");
+
+            return new ModelAndView(URL_REDIRECT, model);
         }
     }
 
@@ -228,16 +207,11 @@ public class ControllerPagesMembres {
             @PathVariable final int id,
             ModelMap model) {
 
-        try {
-            Membre membre = membreService.getMembre(id);
-            setAttributsSuppression(model, membre, getIdInsMaitrises(membre),
-                    getIdInsAppris(membre), id);
+        Membre membre = membreService.getMembre(id);
+        setAttributsSuppression(model, membre, getIdInsMaitrises(membre),
+                getIdInsAppris(membre), id);
 
-            return FORM_MEMBRE;
-        }
-        catch (RepositoryException _) {
-            throw new ControllerException("Erreur inconnue");
-        }
+        return FORM_MEMBRE;
     }
 
     /**
@@ -251,7 +225,7 @@ public class ControllerPagesMembres {
     @PostMapping("/supprimerMembre/{id}")
     public ModelAndView supprimerMembrePost(
             @PathVariable final int id,
-            ModelMap model) throws RepositoryException {
+            ModelMap model) {
 
         try {
             membreService.deleteMembre(id);
@@ -311,9 +285,9 @@ public class ControllerPagesMembres {
         return "listeMembres";
     }
 
-    //----------------------------------------------------------------------------------------------
-    // Méthodes
-    //----------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------
+// Méthodes
+//----------------------------------------------------------------------------------------------
 
     /**
      * Méthode pour compléter un membre d'après le retour de formulaire.
@@ -324,11 +298,9 @@ public class ControllerPagesMembres {
      *
      * @return Membre complété
      *
-     * @throws RepositoryException Si une erreur est survenue
      */
     private Membre completerMembre(final MembreDto membreDto, final List<Integer> idInstrumentsMaitrises,
-                                   final List<Integer> idInstrumentsAppris)
-            throws RepositoryException {
+                                   final List<Integer> idInstrumentsAppris) {
 
         Membre membre = Membre.clone(membreDto);
         ArrayList<Instrument> instrumentsMaitrises = new ArrayList<>();
@@ -406,17 +378,23 @@ public class ControllerPagesMembres {
      * @param idInsMaitrises Liste des id des instruments maitrisés
      * @param idInsAppris    Liste des id des instruments appris
      *
-     * @throws RepositoryException Si une erreur est survenue
      */
     private void setAttributsCommuns(ModelMap model, Membre membre, List<Integer> idInsMaitrises,
-                                     List<Integer> idInsAppris)
-            throws RepositoryException {
+                                     List<Integer> idInsAppris) {
 
-        Iterable<Instrument> instruments = instrumentService.getInstruments();
-        model.addAttribute("instruments", instruments);
-        model.addAttribute("membre", membre);
-        model.addAttribute("idInsMaitrises", idInsMaitrises);
-        model.addAttribute("idInsAppris", idInsAppris);
+        Iterable<Instrument> instruments = null;
+        try {
+            instruments = instrumentService.getInstruments();
+        }
+        catch (RepositoryException _) {
+            instruments = new ArrayList<>();
+        }
+        finally {
+            model.addAttribute("instruments", instruments);
+            model.addAttribute("membre", membre);
+            model.addAttribute("idInsMaitrises", idInsMaitrises);
+            model.addAttribute("idInsAppris", idInsAppris);
+        }
     }
 
     /**
@@ -427,11 +405,9 @@ public class ControllerPagesMembres {
      * @param idInsMaitrises Liste des id des instruments maitrisés
      * @param idInsAppris    Liste des id des instruments appris
      *
-     * @throws RepositoryException Si une erreur est survenue
      */
     private void setAttributsCreation(ModelMap model, Membre membre, List<Integer> idInsMaitrises,
-                                      List<Integer> idInsAppris)
-            throws RepositoryException {
+                                      List<Integer> idInsAppris) {
 
         setAttributsCommuns(model, membre, idInsMaitrises, idInsAppris);
         model.addAttribute(ACTION, "/creerMembre");
@@ -449,11 +425,9 @@ public class ControllerPagesMembres {
      * @param idInsAppris    Liste des id des instruments appris
      * @param idMembre       Id du membre
      *
-     * @throws RepositoryException Si une erreur est survenue
      */
     private void setAttributsModification(ModelMap model, Membre membre, List<Integer> idInsMaitrises,
-                                          List<Integer> idInsAppris, int idMembre)
-            throws RepositoryException {
+                                          List<Integer> idInsAppris, int idMembre) {
 
         setAttributsCommuns(model, membre, idInsMaitrises, idInsAppris);
         model.addAttribute(ACTION, "/modifierMembre/" + idMembre);
@@ -471,11 +445,9 @@ public class ControllerPagesMembres {
      * @param idInsAppris    Liste des id des instruments appris
      * @param idMembre       Id du membre
      *
-     * @throws RepositoryException Si une erreur est survenue
      */
     private void setAttributsSuppression(ModelMap model, Membre membre, List<Integer> idInsMaitrises,
-                                         List<Integer> idInsAppris, int idMembre)
-            throws RepositoryException {
+                                         List<Integer> idInsAppris, int idMembre) {
 
         setAttributsCommuns(model, membre, idInsMaitrises, idInsAppris);
         model.addAttribute(ACTION, "/supprimerMembre/" + idMembre);

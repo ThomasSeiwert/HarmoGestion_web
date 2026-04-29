@@ -1,15 +1,25 @@
 <!DOCTYPE html>
 <html lang="fr-FR" xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="~{fragments/head :: head}">
   <title th:text="${titrePage}">HarmoGestion</title>
 </head>
+
 <body>
 <header th:replace="~{fragments/header :: header}"></header>
+
 <main class="container">
+  <!-- Titre -->
   <h1 class="mb-3">Liste des membres</h1>
+  <!-- Message d'alerte -->
+  <div class="alert alert-success" role="alert" th:text="${statut}" th:hidden="${statut == null}"></div>
+  <!-- Bouton d'ajout -->
   <div class="d-flex justify-content-center mb-3">
     <a class="btn plain-primary" th:href="@{/creerMembre}">Ajouter Un Membre</a>
   </div>
+  <!-- Message si aucun membre -->
+  <div th:if="${aucunMembre} != null" th:text="${aucunMembre}"></div>
+  <!-- Liste des membres -->
   <table id="liste-membres">
     <thead>
     <tr>
@@ -35,6 +45,7 @@
     </tbody>
   </table>
 </main>
+
 <footer th:replace="~{fragments/footer :: footer}"></footer>
 <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
 </body>

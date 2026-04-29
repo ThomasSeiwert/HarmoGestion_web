@@ -3,7 +3,6 @@ package fr.afpa.cda19.harmogestionweb.repositories;
 import fr.afpa.cda19.harmogestionweb.exceptions.RepositoryException;
 import fr.afpa.cda19.harmogestionweb.models.Instrument;
 import fr.afpa.cda19.harmogestionweb.utilities.CustomProperties;
-import fr.afpa.cda19.harmogestionweb.utilities.RepositoryUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -12,6 +11,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @Slf4j
@@ -55,24 +55,28 @@ public class InstrumentRepository {
     /**
      * Envoi à l'api d'une requête pour récupérer la liste des instruments.
      *
-     * @return la liste des instruments, ou null si aucun instrument trouvé.
+     * @return la liste des instruments, ou null si aucun instrument trouvé
      *
-     * @throws RepositoryException si une action qui a échoué et qui nécessite
-     *                             d'avertir l'utilisateur est survenue
+     * @throws RepositoryException si aucun instrument trouvé
      */
     public Iterable<Instrument> getInstruments() throws RepositoryException {
 
-        String url = baseApiUrl + "/instruments";
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<Iterable<Instrument>> response = restTemplate.exchange(
-                url,
-                HttpMethod.GET,
-                null,
-                new ParameterizedTypeReference<>() {
-                }
-        );
-        RepositoryUtil<Iterable<Instrument>> repositoryUtil = new RepositoryUtil<>();
-        return repositoryUtil.handleResponse(response, "Aucun instrument trouvé");
+        try {
+            String url = baseApiUrl + "/instruments";
+            RestTemplate restTemplate = new RestTemplate();
+            ResponseEntity<Iterable<Instrument>> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.GET,
+                    null,
+                    new ParameterizedTypeReference<>() {
+
+                    }
+            );
+            return response.getBody();
+        }
+        catch (HttpClientErrorException hcee) {
+            throw new RepositoryException(hcee.getResponseBodyAsString());
+        }
     }
 
     /**
@@ -82,10 +86,8 @@ public class InstrumentRepository {
      *
      * @return l'instrument correspondant à l'id
      *
-     * @throws RepositoryException si une action qui a échoué et qui nécessite
-     *                             d'avertir l'utilisateur est survenue
      */
-    public Instrument getInstrument(final int id) throws RepositoryException {
+    public Instrument getInstrument(final int id) {
 
         String url = baseApiUrl + instrumentURI + "/" + id;
         RestTemplate restTemplate = new RestTemplate();
@@ -95,8 +97,7 @@ public class InstrumentRepository {
                 null,
                 Instrument.class
         );
-        RepositoryUtil<Instrument> repositoryUtil = new RepositoryUtil<>();
-        return repositoryUtil.handleResponse(response, null);
+        return response.getBody();
     }
 
     /**
@@ -106,24 +107,25 @@ public class InstrumentRepository {
      *
      * @return l'instrument créé
      *
-     * @throws RepositoryException si une action qui a échoué et qui nécessite
-     *                             d'avertir l'utilisateur est survenue
+     * @throws RepositoryException si le libellé de l'instrument existe déjà
      */
-    public Instrument createInstrument(final Instrument instrument)
-            throws RepositoryException {
+    public Instrument createInstrument(final Instrument instrument) throws RepositoryException {
 
-        String url = baseApiUrl + instrumentURI;
-        RestTemplate restTemplate = new RestTemplate();
-        HttpEntity<Instrument> request = new HttpEntity<>(instrument);
-        ResponseEntity<Instrument> response = restTemplate.exchange(
-                url,
-                HttpMethod.POST,
-                request,
-                Instrument.class
-        );
-        RepositoryUtil<Instrument> repositoryUtil = new RepositoryUtil<>();
-        return repositoryUtil.handleResponse(response,
-                "Cet instrument existe déjà");
+        try {
+            String url = baseApiUrl + instrumentURI;
+            RestTemplate restTemplate = new RestTemplate();
+            HttpEntity<Instrument> request = new HttpEntity<>(instrument);
+            ResponseEntity<Instrument> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.POST,
+                    request,
+                    Instrument.class
+            );
+            return response.getBody();
+        }
+        catch (HttpClientErrorException hcee) {
+            throw new RepositoryException(hcee.getResponseBodyAsString());
+        }
     }
 
     /**
@@ -133,24 +135,25 @@ public class InstrumentRepository {
      *
      * @return l'instrument modifié
      *
-     * @throws RepositoryException si une action qui a échoué et qui nécessite
-     *                             d'avertir l'utilisateur est survenue
+     * @throws RepositoryException si le libellé de l'instrument existe déjà
      */
-    public Instrument updateInstrument(final Instrument instrument)
-            throws RepositoryException {
+    public Instrument updateInstrument(final Instrument instrument) throws RepositoryException {
 
-        String url = baseApiUrl + instrumentURI + "/" + instrument.getIdInstrument();
-        RestTemplate restTemplate = new RestTemplate();
-        HttpEntity<Instrument> request = new HttpEntity<>(instrument);
-        ResponseEntity<Instrument> response = restTemplate.exchange(
-                url,
-                HttpMethod.PUT,
-                request,
-                Instrument.class
-        );
-        RepositoryUtil<Instrument> repositoryUtil = new RepositoryUtil<>();
-        return repositoryUtil.handleResponse(response,
-                "Cet instrument existe déjà");
+        try {
+            String url = baseApiUrl + instrumentURI + "/" + instrument.getIdInstrument();
+            RestTemplate restTemplate = new RestTemplate();
+            HttpEntity<Instrument> request = new HttpEntity<>(instrument);
+            ResponseEntity<Instrument> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.PUT,
+                    request,
+                    Instrument.class
+            );
+            return response.getBody();
+        }
+        catch (HttpClientErrorException hcee) {
+            throw new RepositoryException(hcee.getResponseBodyAsString());
+        }
     }
 
     /**
@@ -158,21 +161,22 @@ public class InstrumentRepository {
      *
      * @param id identifiant de l'instrument à supprimer
      *
-     * @throws RepositoryException si une action qui a échoué et qui nécessite
-     *                             d'avertir l'utilisateur est survenue
+     * @throws RepositoryException si l'instrument est encore utilisé
      */
     public void deleteInstrument(final int id) throws RepositoryException {
 
-        String url = baseApiUrl + instrumentURI + "/" + id;
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<Void> response = restTemplate.exchange(
-                url,
-                HttpMethod.DELETE,
-                null,
-                Void.class
-        );
-        RepositoryUtil<Void> repositoryUtil = new RepositoryUtil<>();
-        repositoryUtil.handleResponse(response,
-                "Vous ne pouvez pas supprimer cet instrument car il est utilisé");
+        try {
+            String url = baseApiUrl + instrumentURI + "/" + id;
+            RestTemplate restTemplate = new RestTemplate();
+            restTemplate.exchange(
+                    url,
+                    HttpMethod.DELETE,
+                    null,
+                    Void.class
+            );
+        }
+        catch (HttpClientErrorException hcee) {
+            throw new RepositoryException(hcee.getResponseBodyAsString());
+        }
     }
 }

@@ -66,10 +66,8 @@ public class MembreService {
      *
      * @return le membre correspondant à l'id
      *
-     * @throws RepositoryException si une action qui a échoué et qui nécessite
-     *                             d'avertir l'utilisateur est survenue
      */
-    public Membre getMembre(final int id) throws RepositoryException {
+    public Membre getMembre(final int id) {
 
         return membreRepository.getMembre(id);
     }
@@ -81,10 +79,8 @@ public class MembreService {
      *
      * @return le membre créé ou modifié
      *
-     * @throws RepositoryException si une action qui a échoué et qui nécessite
-     *                             d'avertir l'utilisateur est survenue
      */
-    public Membre saveMembre(final Membre membre) throws RepositoryException {
+    public Membre saveMembre(final Membre membre) {
 
         if (membre.getIdMembre() == null) {
             return membreRepository.createMembre(membre);

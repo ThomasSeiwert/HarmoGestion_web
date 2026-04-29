@@ -3,7 +3,6 @@ package fr.afpa.cda19.harmogestionweb.repositories;
 import fr.afpa.cda19.harmogestionweb.exceptions.RepositoryException;
 import fr.afpa.cda19.harmogestionweb.models.Membre;
 import fr.afpa.cda19.harmogestionweb.utilities.CustomProperties;
-import fr.afpa.cda19.harmogestionweb.utilities.RepositoryUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -12,6 +11,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -51,6 +51,7 @@ public class MembreRepository {
      */
     public MembreRepository(
             @Autowired final CustomProperties customProperties) {
+
         baseApiUrl = customProperties.getApiUrl();
         membreURI = "/membre";
     }
@@ -62,24 +63,28 @@ public class MembreRepository {
     /**
      * Envoi à l'api d'une requête pour récupérer la liste des membres.
      *
-     * @return la liste des membres, ou null si aucun membre trouvé.
+     * @return la liste des membres
      *
-     * @throws RepositoryException si une action qui a échoué et qui nécessite
-     *                             d'avertir l'utilisateur est survenue
+     * @throws RepositoryException si aucun membre trouvé
      */
     public Iterable<Membre> getMembres() throws RepositoryException {
 
-        String url = baseApiUrl + "/membres";
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<Iterable<Membre>> response = restTemplate.exchange(
-                url,
-                HttpMethod.GET,
-                null,
-                new ParameterizedTypeReference<>() {
-                }
-        );
-        RepositoryUtil<Iterable<Membre>> repositoryUtil = new RepositoryUtil<>();
-        return repositoryUtil.handleResponse(response, "Aucun membre trouvé");
+        try {
+            String url = baseApiUrl + "/membres";
+            RestTemplate restTemplate = new RestTemplate();
+            ResponseEntity<Iterable<Membre>> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.GET,
+                    null,
+                    new ParameterizedTypeReference<>() {
+
+                    }
+            );
+            return response.getBody();
+        }
+        catch (HttpClientErrorException hcee) {
+            throw new RepositoryException(hcee.getResponseBodyAsString());
+        }
     }
 
     /**
@@ -89,10 +94,8 @@ public class MembreRepository {
      *
      * @return le membre correspondant à l'id
      *
-     * @throws RepositoryException si une action qui a échoué et qui nécessite
-     *                             d'avertir l'utilisateur est survenue
      */
-    public Membre getMembre(final int id) throws RepositoryException {
+    public Membre getMembre(final int id) {
 
         String url = baseApiUrl + membreURI + "/" + id;
         RestTemplate restTemplate = new RestTemplate();
@@ -102,8 +105,7 @@ public class MembreRepository {
                 null,
                 Membre.class
         );
-        RepositoryUtil<Membre> repositoryUtil = new RepositoryUtil<>();
-        return repositoryUtil.handleResponse(response, null);
+        return response.getBody();
     }
 
     /**
@@ -113,11 +115,8 @@ public class MembreRepository {
      *
      * @return le membre créé
      *
-     * @throws RepositoryException si une action qui a échoué et qui nécessite
-     *                             d'avertir l'utilisateur est survenue
      */
-    public Membre createMembre(final Membre membre)
-            throws RepositoryException {
+    public Membre createMembre(final Membre membre) {
 
         String url = baseApiUrl + membreURI;
         RestTemplate restTemplate = new RestTemplate();
@@ -128,8 +127,7 @@ public class MembreRepository {
                 request,
                 Membre.class
         );
-        RepositoryUtil<Membre> repositoryUtil = new RepositoryUtil<>();
-        return repositoryUtil.handleResponse(response, null);
+        return response.getBody();
     }
 
     /**
@@ -139,11 +137,8 @@ public class MembreRepository {
      *
      * @return le membre modifié
      *
-     * @throws RepositoryException si une action qui a échoué et qui nécessite
-     *                             d'avertir l'utilisateur est survenue
      */
-    public Membre updateMembre(final Membre membre)
-            throws RepositoryException {
+    public Membre updateMembre(final Membre membre) {
 
         String url = baseApiUrl + membreURI + "/" + membre.getIdMembre();
         RestTemplate restTemplate = new RestTemplate();
@@ -154,8 +149,7 @@ public class MembreRepository {
                 request,
                 Membre.class
         );
-        RepositoryUtil<Membre> repositoryUtil = new RepositoryUtil<>();
-        return repositoryUtil.handleResponse(response, null);
+        return response.getBody();
     }
 
     /**
@@ -163,21 +157,22 @@ public class MembreRepository {
      *
      * @param id identifiant du membre à supprimer
      *
-     * @throws RepositoryException si une action qui a échoué et qui nécessite
-     *                             d'avertir l'utilisateur est survenue
+     * @throws RepositoryException si le membre est utilisé
      */
     public void deleteMembre(final int id) throws RepositoryException {
 
-        String url = baseApiUrl + membreURI + "/" + id;
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<Void> response = restTemplate.exchange(
-                url,
-                HttpMethod.DELETE,
-                null,
-                Void.class
-        );
-        RepositoryUtil<Void> repositoryUtil = new RepositoryUtil<>();
-        repositoryUtil.handleResponse(response,
-                "Vous ne pouvez pas supprimer ce membre car il est utilisé");
+        try {
+            String url = baseApiUrl + membreURI + "/" + id;
+            RestTemplate restTemplate = new RestTemplate();
+            restTemplate.exchange(
+                    url,
+                    HttpMethod.DELETE,
+                    null,
+                    Void.class
+            );
+        }
+        catch (HttpClientErrorException hcee) {
+            throw new RepositoryException(hcee.getResponseBodyAsString());
+        }
     }
 }

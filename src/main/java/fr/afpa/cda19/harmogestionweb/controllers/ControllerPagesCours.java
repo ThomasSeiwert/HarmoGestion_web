@@ -97,14 +97,9 @@ public class ControllerPagesCours {
     @GetMapping("/creerCours")
     public String creerCoursGet(ModelMap model) {
 
-        try {
-            setAttributsCreation(model, new Cours(), null, null, new ArrayList<>());
+        setAttributsCreation(model, new Cours(), null, null, new ArrayList<>());
 
-            return FORM_COURS;
-        }
-        catch (RepositoryException _) {
-            throw new ControllerException("Erreur inconnue");
-        }
+        return FORM_COURS;
     }
 
     /**
@@ -124,26 +119,21 @@ public class ControllerPagesCours {
             @ModelAttribute final CoursDto coursDto,
             ModelMap model) {
 
-        try {
-            Cours cours = completerCours(coursDto, idInstrument, idEnseignant, idParticipants);
+        Cours cours = completerCours(coursDto, idInstrument, idEnseignant, idParticipants);
 
-            Set<ConstraintViolation<Cours>> erreurs = getErreurs(cours);
-            setMessagesErreur(erreurs, model);
+        Set<ConstraintViolation<Cours>> erreurs = getErreurs(cours);
+        setMessagesErreur(erreurs, model);
 
-            if (!erreurs.isEmpty()) {
-                setAttributsCreation(model, cours, idInstrument, idEnseignant, idParticipants);
+        if (!erreurs.isEmpty()) {
+            setAttributsCreation(model, cours, idInstrument, idEnseignant, idParticipants);
 
-                return new ModelAndView(FORM_COURS, model);
-            }
-            else {
-                coursService.saveCours(cours);
-                model.addAttribute(STATUT, "created");
-
-                return new ModelAndView(URL_REDIRECT, model);
-            }
+            return new ModelAndView(FORM_COURS, model);
         }
-        catch (RepositoryException _) {
-            throw new ControllerException("Erreur inconnue");
+        else {
+            coursService.saveCours(cours);
+            model.addAttribute(STATUT, "created");
+
+            return new ModelAndView(URL_REDIRECT, model);
         }
     }
 
@@ -160,21 +150,16 @@ public class ControllerPagesCours {
             @PathVariable final int id,
             ModelMap model) {
 
-        try {
-            Cours cours = coursService.getCours(id);
-            ArrayList<Integer> idParticipants = new ArrayList<>();
-            for (Membre membre : cours.getParticipants()) {
-                idParticipants.add(membre.getIdMembre());
-            }
-
-            setAttributsModification(model, cours, cours.getInstrument().getIdInstrument(),
-                    cours.getEnseignant().getIdMembre(), idParticipants, id);
-
-            return FORM_COURS;
+        Cours cours = coursService.getCours(id);
+        ArrayList<Integer> idParticipants = new ArrayList<>();
+        for (Membre membre : cours.getParticipants()) {
+            idParticipants.add(membre.getIdMembre());
         }
-        catch (RepositoryException _) {
-            throw new ControllerException("Erreur inconnue");
-        }
+
+        setAttributsModification(model, cours, cours.getInstrument().getIdInstrument(),
+                cours.getEnseignant().getIdMembre(), idParticipants, id);
+
+        return FORM_COURS;
     }
 
     /**
@@ -195,27 +180,22 @@ public class ControllerPagesCours {
             @ModelAttribute final CoursDto coursDto,
             ModelMap model) {
 
-        try {
-            Cours cours = completerCours(coursDto, idInstrument, idEnseignant, idParticipants);
+        Cours cours = completerCours(coursDto, idInstrument, idEnseignant, idParticipants);
 
-            Set<ConstraintViolation<Cours>> erreurs = getErreurs(cours);
-            setMessagesErreur(erreurs, model);
+        Set<ConstraintViolation<Cours>> erreurs = getErreurs(cours);
+        setMessagesErreur(erreurs, model);
 
-            if (!erreurs.isEmpty()) {
-                setAttributsModification(model, cours, idInstrument, idEnseignant,
-                        idParticipants, id);
+        if (!erreurs.isEmpty()) {
+            setAttributsModification(model, cours, idInstrument, idEnseignant,
+                    idParticipants, id);
 
-                return new ModelAndView(FORM_COURS, model);
-            }
-            else {
-                coursService.saveCours(cours);
-                model.addAttribute(STATUT, "updated");
-
-                return new ModelAndView(URL_REDIRECT, model);
-            }
+            return new ModelAndView(FORM_COURS, model);
         }
-        catch (RepositoryException _) {
-            throw new ControllerException("Erreur inconnue");
+        else {
+            coursService.saveCours(cours);
+            model.addAttribute(STATUT, "updated");
+
+            return new ModelAndView(URL_REDIRECT, model);
         }
     }
 
@@ -232,21 +212,16 @@ public class ControllerPagesCours {
             @PathVariable final int id,
             ModelMap model) {
 
-        try {
-            Cours cours = coursService.getCours(id);
-            ArrayList<Integer> idParticipants = new ArrayList<>();
-            for (Membre membre : cours.getParticipants()) {
-                idParticipants.add(membre.getIdMembre());
-            }
-
-            setAttributsSuppression(model, cours, cours.getInstrument().getIdInstrument(),
-                    cours.getEnseignant().getIdMembre(), idParticipants, id);
-
-            return FORM_COURS;
+        Cours cours = coursService.getCours(id);
+        ArrayList<Integer> idParticipants = new ArrayList<>();
+        for (Membre membre : cours.getParticipants()) {
+            idParticipants.add(membre.getIdMembre());
         }
-        catch (RepositoryException _) {
-            throw new ControllerException("Erreur inconnue");
-        }
+
+        setAttributsSuppression(model, cours, cours.getInstrument().getIdInstrument(),
+                cours.getEnseignant().getIdMembre(), idParticipants, id);
+
+        return FORM_COURS;
     }
 
     /**
@@ -262,15 +237,10 @@ public class ControllerPagesCours {
             @PathVariable final int id,
             ModelMap model) {
 
-        try {
-            coursService.deleteCours(id);
-            model.addAttribute(STATUT, "deleted");
+        coursService.deleteCours(id);
+        model.addAttribute(STATUT, "deleted");
 
-            return new ModelAndView(URL_REDIRECT, model);
-        }
-        catch (RepositoryException _) {
-            throw new ControllerException("Erreur inconnue");
-        }
+        return new ModelAndView(URL_REDIRECT, model);
     }
 
     /**
@@ -286,18 +256,18 @@ public class ControllerPagesCours {
             Model model) {
 
         if (statut.isPresent()) {
-        switch (statut.get()) {
-            case "created":
-                model.addAttribute(STATUT, "Création réussie");
-                break;
-            case "updated":
-                model.addAttribute(STATUT, "Modification réussie");
-                break;
-            case "deleted":
-                model.addAttribute(STATUT, "Suppression réussie");
-                break;
-            default:
-        }
+            switch (statut.get()) {
+                case "created":
+                    model.addAttribute(STATUT, "Création réussie");
+                    break;
+                case "updated":
+                    model.addAttribute(STATUT, "Modification réussie");
+                    break;
+                case "deleted":
+                    model.addAttribute(STATUT, "Suppression réussie");
+                    break;
+                default:
+            }
         }
         try {
             ArrayList<Cours> listeCours = (ArrayList<Cours>) coursService.getProchainsCours();
@@ -336,11 +306,9 @@ public class ControllerPagesCours {
      *
      * @return Cours complété
      *
-     * @throws RepositoryException Si une erreur est survenue
      */
     private Cours completerCours(final CoursDto coursDto, final int idInstrument,
-                                 final int idEnseignant, final List<Integer> idParticipants)
-            throws RepositoryException {
+                                 final int idEnseignant, final List<Integer> idParticipants) {
 
         Cours cours = Cours.clone(coursDto);
         cours.setInstrument(instrumentService.getInstrument(idInstrument));
@@ -397,21 +365,29 @@ public class ControllerPagesCours {
      * @param idEnseignant   Id de l'enseignant du cours
      * @param idParticipants Liste des id des participants du cours
      *
-     * @throws RepositoryException Si une erreur est survenue
      */
     private void setAttributsCommuns(ModelMap model, Cours cours,
                                      Integer idInstrument, Integer idEnseignant,
-                                     List<Integer> idParticipants)
-            throws RepositoryException {
+                                     List<Integer> idParticipants) {
 
-        Iterable<Instrument> instruments = instrumentService.getInstruments();
-        Iterable<Membre> membres = membreService.getMembres();
-        model.addAttribute("instruments", instruments);
-        model.addAttribute("membres", membres);
-        model.addAttribute("cours", cours);
-        model.addAttribute("idInstrument", idInstrument);
-        model.addAttribute("idEnseignant", idEnseignant);
-        model.addAttribute("idParticipants", idParticipants);
+        Iterable<Instrument> instruments = null;
+        Iterable<Membre> membres = null;
+        try {
+            instruments = instrumentService.getInstruments();
+            membres = membreService.getMembres();
+        }
+        catch (RepositoryException _) {
+            instruments = new ArrayList<>();
+            membres = new ArrayList<>();
+        }
+        finally {
+            model.addAttribute("instruments", instruments);
+            model.addAttribute("membres", membres);
+            model.addAttribute("cours", cours);
+            model.addAttribute("idInstrument", idInstrument);
+            model.addAttribute("idEnseignant", idEnseignant);
+            model.addAttribute("idParticipants", idParticipants);
+        }
     }
 
     /**
@@ -423,12 +399,10 @@ public class ControllerPagesCours {
      * @param idEnseignant   Id de l'enseignant du cours
      * @param idParticipants Liste des id des participants du cours
      *
-     * @throws RepositoryException Si une erreur est survenue
      */
     private void setAttributsCreation(ModelMap model, Cours cours,
                                       Integer idInstrument, Integer idEnseignant,
-                                      List<Integer> idParticipants)
-            throws RepositoryException {
+                                      List<Integer> idParticipants) {
 
         setAttributsCommuns(model, cours, idInstrument, idEnseignant, idParticipants);
         model.addAttribute(ACTION, "/creerCours");
@@ -447,12 +421,10 @@ public class ControllerPagesCours {
      * @param idParticipants Liste des id des participants du cours
      * @param idCours        Id du cours
      *
-     * @throws RepositoryException Si une erreur est survenue
      */
     private void setAttributsModification(ModelMap model, Cours cours,
                                           Integer idInstrument, Integer idEnseignant,
-                                          List<Integer> idParticipants, int idCours)
-            throws RepositoryException {
+                                          List<Integer> idParticipants, int idCours) {
 
         setAttributsCommuns(model, cours, idInstrument, idEnseignant, idParticipants);
         model.addAttribute(ACTION, "/modifierCours/" + idCours);
@@ -471,12 +443,10 @@ public class ControllerPagesCours {
      * @param idParticipants Liste des id des participants du cours
      * @param idCours        Id du cours
      *
-     * @throws RepositoryException Si une erreur est survenue
      */
     private void setAttributsSuppression(ModelMap model, Cours cours,
                                          Integer idInstrument, Integer idEnseignant,
-                                         List<Integer> idParticipants, int idCours)
-            throws RepositoryException {
+                                         List<Integer> idParticipants, int idCours) {
 
         setAttributsCommuns(model, cours, idInstrument, idEnseignant, idParticipants);
         model.addAttribute(ACTION, "/supprimerCours/" + idCours);
