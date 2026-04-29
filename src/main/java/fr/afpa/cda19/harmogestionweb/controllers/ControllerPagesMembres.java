@@ -355,8 +355,10 @@ public class ControllerPagesMembres {
     private List<Integer> getIdInsMaitrises(final Membre membre) {
 
         ArrayList<Integer> idInsMaitrises = new ArrayList<>();
-        for (Instrument instrument : membre.getInstrumentsMaitrises()) {
-            idInsMaitrises.add(instrument.getIdInstrument());
+        if (membre.getInstrumentsMaitrises() != null) {
+            for (Instrument instrument : membre.getInstrumentsMaitrises()) {
+                idInsMaitrises.add(instrument.getIdInstrument());
+            }
         }
         return idInsMaitrises;
     }
@@ -364,8 +366,10 @@ public class ControllerPagesMembres {
     private List<Integer> getIdInsAppris(final Membre membre) {
 
         ArrayList<Integer> idInsAppris = new ArrayList<>();
-        for (Instrument instrument : membre.getInstrumentsAppris()) {
-            idInsAppris.add(instrument.getIdInstrument());
+        if (membre.getInstrumentsAppris() != null) {
+            for (Instrument instrument : membre.getInstrumentsAppris()) {
+                idInsAppris.add(instrument.getIdInstrument());
+            }
         }
         return idInsAppris;
     }
