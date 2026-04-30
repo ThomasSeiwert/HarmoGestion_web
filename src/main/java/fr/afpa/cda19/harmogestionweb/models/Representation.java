@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;
@@ -48,6 +49,7 @@ public class Representation {
      */
     @NotNull(message = "La représentation doit avoir une date")
     @FutureOrPresent(message = "La représentation doit être à une date future")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime dateRepresentation;
 
     /**
