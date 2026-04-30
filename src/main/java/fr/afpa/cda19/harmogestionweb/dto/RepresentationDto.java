@@ -46,4 +46,13 @@ public class RepresentationDto {
     @FutureOrPresent(message = "La représentation doit être à une date future")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime dateRepresentation;
+
+    /**
+     * Lieu de la représentation.
+     */
+    @NotNull(message = "La représentation doit avoir un lieu")
+    @Size(min = 3, max = 50,
+            message = "Le lieu de la représentation doit faire entre trois "
+                    + "et cinquante caractères de long")
+    private String lieuRepresentation;
 }

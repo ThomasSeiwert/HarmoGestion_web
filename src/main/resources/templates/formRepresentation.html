@@ -29,6 +29,13 @@
              type="datetime-local" th:disabled="${nomSubmit == 'Supprimer'}" required>
       <div class="message-erreur" th:text="${dateRepresentationErr}"></div>
     </div>
+    <!-- Lieu de la représentation -->
+    <div class="mb-3">
+      <label class="form-label" for="lieu-representation">Lieu</label>
+      <input class="form-control" id="lieu-representation" th:field="*{lieuRepresentation}"
+             type="text" th:disabled="${nomSubmit == 'Supprimer'}" required>
+      <div class="message-erreur" th:text="${lieuRepresentationErr}"></div>
+    </div>
     <!-- Participants -->
     <div class="mb-3">
       <label class="form-label" for="participants">Participants</label>

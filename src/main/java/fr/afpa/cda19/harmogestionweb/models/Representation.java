@@ -53,6 +53,15 @@ public class Representation {
     private LocalDateTime dateRepresentation;
 
     /**
+     * Lieu de la représentation.
+     */
+    @NotNull(message = "La représentation doit avoir un lieu")
+    @Size(min = 3, max = 50,
+            message = "Le lieu de la représentation doit faire entre trois "
+                    + "et cinquante caractères de long")
+    private String lieuRepresentation;
+
+    /**
      * Liste des membres participants.
      */
     @NotNull(message = "La représentation doit avoir des participants")
@@ -93,6 +102,7 @@ public class Representation {
         representationClone.setIdRepresentation(representationDTO.getIdRepresentation());
         representationClone.setNomRepresentation(representationDTO.getNomRepresentation());
         representationClone.setDateRepresentation(representationDTO.getDateRepresentation());
+        representationClone.setLieuRepresentation(representationDTO.getLieuRepresentation());
 
         return representationClone;
     }
