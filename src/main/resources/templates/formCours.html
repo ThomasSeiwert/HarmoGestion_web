@@ -2,12 +2,12 @@
 
 <html lang="fr-FR" xmlns:th="http://www.thymeleaf.org">
 
-  <head th:replace="fragments/head :: head">
+  <head th:replace="~{fragments/head :: head}">
     <title th:text="${titrePage}">HarmoGestion : Créer un cours</title>
   </head>
 
   <body>
-    <header th:replace="fragments/header :: header"></header>
+    <header th:replace="~{fragments/header :: header}"></header>
 
     <main class="container">
       <!-- Titre -->
@@ -73,9 +73,9 @@
       </form>
     </main>
 
-    <footer th:replace="fragments/footer :: footer"></footer>
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
 
-    <script th:replace="fragments/script-bootstrap :: script-bootstrap"></script>
+    <script th:replace="~{fragments/script-bootstrap :: script-bootstrap}"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.0/dist/jquery.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="/js/formCours.js"></script>

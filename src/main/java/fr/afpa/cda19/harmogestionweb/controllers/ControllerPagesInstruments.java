@@ -65,7 +65,7 @@ public class ControllerPagesInstruments {
     /**
      * Nom de la vue.
      */
-    public static final String NOM_FORM_VUE = "formulaireInstrument";
+    public static final String NOM_FORM_VUE = "formInstrument";
 
     /**
      * URL de redirection.

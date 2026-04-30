@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 
-<html lang="Fr-fr" xmlns:th="http://www.thymeleaf.org">
+<html lang="fr-FR" xmlns:th="http://www.thymeleaf.org">
 
-  <head th:replace="fragments/head :: head">
+  <head th:replace="~{fragments/head :: head}">
     <title th:text="${titrePage}"></title>
   </head>
 
   <body>
-    <header th:replace="fragments/header :: header"></header>
+    <header th:replace="~{fragments/header :: header}"></header>
 
     <main class="container">
       <!-- Titre principal -->
@@ -45,8 +45,8 @@
       </article>
     </main>
 
-    <footer th:replace="fragments/footer :: footer"></footer>
-    <script th:replace="fragments/script-bootstrap :: script-bootstrap"></script>
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+    <script th:replace="~{fragments/script-bootstrap :: script-bootstrap}"></script>
   </body>
 
 </html>

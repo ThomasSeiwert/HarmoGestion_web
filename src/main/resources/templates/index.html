@@ -1,62 +1,63 @@
 <!DOCTYPE html>
-<html lang="Fr-fr" xmlns:th="http://www.thymeleaf.org">
-  <head th:replace="fragments/head :: head">
-    <title th:text="${titrePage}">HarmoGestion : Accueil</title>
-  </head>
-  <body>
-    <header th:replace="fragments/header :: header"></header>
-    <main class="container">
-      <!-- Membre-->
-      <section class="formulaire">
-        <h1 th:text="#{titre.membres}"></h1>
-        <div class="d-flex flex-column flex-lg-row gap-3 justify-content-center">
-          <a type="button" class="btn plain-primary btn-lg" th:text="#{titre.listeMembres}"
-             th:href="@{/listeMembres}"></a>
-          <a type="button" class="btn plain-primary btn-lg" th:text="#{titre.creerMembre}"
-             th:href="@{creerMembre}"></a>
-        </div>
-      </section>
-      <br>
+<html lang="fr-FR" xmlns:th="http://www.thymeleaf.org">
 
-      <!-- Cours-->
-      <section class="formulaire">
-        <h1 th:text="#{titre.cours}"></h1>
-        <div class="d-flex flex-column flex-lg-row gap-3 justify-content-center">
-          <a type="button" class="btn plain-primary btn-lg" th:text="#{titre.prochainsCours}"
-             th:href="@{prochainsCours}"></a>
-          <a type="button" class="btn plain-primary btn-lg" th:text="#{titre.creerCours}"
-             th:href="@{creerCours}"></a>
-        </div>
-      </section>
-      <br>
+<head th:replace="~{fragments/head :: head}">
+  <title th:text="${titrePage}">HarmoGestion : Accueil</title>
+</head>
 
-      <!-- Représentation-->
-      <section class="formulaire">
-        <h1 th:text="#{titre.representations}"></h1>
-        <div class="d-flex flex-column flex-lg-row gap-3 justify-content-center">
-          <a type="button" class="btn plain-primary btn-lg" th:text="#{titre.prochainesRepresentations}"
-             th:href="@{prochainesRepresentations}"></a>
-          <a type="button" class="btn plain-primary btn-lg" th:text="#{titre.planifierRepresentation}"
-             th:href="@{planifierRepresentation}"></a>
-        </div>
-      </section>
-      <br>
+<body>
+<header th:replace="~{fragments/header :: header}"></header>
 
-      <!-- Instrument-->
-      <section class="formulaire">
-        <h1 th:text="#{titre.instruments}"></h1>
-        <div class="d-flex flex-column flex-lg-row gap-3 justify-content-center">
-          <a type="button" class="btn plain-primary btn-lg" th:text="#{titre.ajouterInstrument}"
-             th:href="@{ajouterInstrument}"></a>
-          <a type="button" class="btn plain-primary btn-lg" th:text="#{titre.listeInstruments}"
-             th:href="@{listeInstruments}"></a>
-        </div>
-      </section>
-      <br>
+<main class="container">
+  <!-- Membres -->
+  <section class="formulaire">
+    <h1 th:text="#{titre.membres}">Membres</h1>
+    <div class="d-flex flex-column flex-lg-row gap-3 justify-content-center">
+      <a type="button" class="btn plain-primary btn-lg" th:text="#{titre.listeMembres}"
+         th:href="@{/listeMembres}"></a>
+      <a type="button" class="btn plain-primary btn-lg" th:text="#{titre.creerMembre}"
+         th:href="@{creerMembre}"></a>
+    </div>
+  </section>
+  <br>
+  <!-- Cours -->
+  <section class="formulaire">
+    <h1 th:text="#{titre.cours}">Cours</h1>
+    <div class="d-flex flex-column flex-lg-row gap-3 justify-content-center">
+      <a type="button" class="btn plain-primary btn-lg" th:text="#{titre.prochainsCours}"
+         th:href="@{prochainsCours}"></a>
+      <a type="button" class="btn plain-primary btn-lg" th:text="#{titre.creerCours}"
+         th:href="@{creerCours}"></a>
+    </div>
+  </section>
+  <br>
+  <!-- Représentations -->
+  <section class="formulaire">
+    <h1 th:text="#{titre.representations}">Représentations</h1>
+    <div class="d-flex flex-column flex-lg-row gap-3 justify-content-center">
+      <a type="button" class="btn plain-primary btn-lg" th:text="#{titre.prochainesRepresentations}"
+         th:href="@{prochainesRepresentations}"></a>
+      <a type="button" class="btn plain-primary btn-lg" th:text="#{titre.planifierRepresentation}"
+         th:href="@{planifierRepresentation}"></a>
+    </div>
+  </section>
+  <br>
+  <!-- Instruments -->
+  <section class="formulaire">
+    <h1 th:text="#{titre.instruments}">Instruments</h1>
+    <div class="d-flex flex-column flex-lg-row gap-3 justify-content-center">
+      <a type="button" class="btn plain-primary btn-lg" th:text="#{titre.ajouterInstrument}"
+         th:href="@{ajouterInstrument}"></a>
+      <a type="button" class="btn plain-primary btn-lg" th:text="#{titre.listeInstruments}"
+         th:href="@{listeInstruments}"></a>
+    </div>
+  </section>
+  <br>
+</main>
 
-    </main>
-    <footer th:replace="fragments/footer :: footer"></footer>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
 
-    <script th:replace="fragments/script-bootstrap :: script-bootstrap"></script>
-  </body>
+<script th:replace="~{fragments/script-bootstrap :: script-bootstrap}"></script>
+</body>
+
 </html>
