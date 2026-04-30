@@ -108,12 +108,6 @@ public class ControllerPagesMembres {
             @ModelAttribute final MembreDto membreDto,
             ModelMap model) {
 
-        if (idInsMaitrises == null) {
-            idInsMaitrises = new ArrayList<>();
-        }
-        if (idInsAppris == null) {
-            idInsAppris = new ArrayList<>();
-        }
         Membre membre = completerMembre(membreDto, idInsMaitrises, idInsAppris);
 
         Set<ConstraintViolation<Membre>> erreurs = getErreurs(membre);
@@ -171,12 +165,6 @@ public class ControllerPagesMembres {
             @ModelAttribute final MembreDto membreDto,
             ModelMap model) {
 
-        if (idInsMaitrises == null) {
-            idInsMaitrises = new ArrayList<>();
-        }
-        if (idInsAppris == null) {
-            idInsAppris = new ArrayList<>();
-        }
         Membre membre = completerMembre(membreDto, idInsMaitrises, idInsAppris);
 
         Set<ConstraintViolation<Membre>> erreurs = getErreurs(membre);
@@ -280,25 +268,31 @@ public class ControllerPagesMembres {
     /**
      * Méthode pour compléter un membre d'après le retour de formulaire.
      *
-     * @param membreDto              Membre à compléter
-     * @param idInstrumentsMaitrises Liste des id des instruments maitrisés
-     * @param idInstrumentsAppris    Liste des id des instruments appris
+     * @param membreDto      Membre à compléter
+     * @param idInsMaitrises Liste des id des instruments maitrisés
+     * @param idInsAppris    Liste des id des instruments appris
      *
      * @return Membre complété
      *
      */
-    private Membre completerMembre(final MembreDto membreDto, final List<Integer> idInstrumentsMaitrises,
-                                   final List<Integer> idInstrumentsAppris) {
+    private Membre completerMembre(final MembreDto membreDto, List<Integer> idInsMaitrises,
+                                   List<Integer> idInsAppris) {
 
         Membre membre = Membre.clone(membreDto);
         ArrayList<Instrument> instrumentsMaitrises = new ArrayList<>();
         ArrayList<Instrument> instrumentsAppris = new ArrayList<>();
-        for (int id : idInstrumentsMaitrises) {
+        if (idInsMaitrises == null) {
+            idInsMaitrises = new ArrayList<>();
+        }
+        if (idInsAppris == null) {
+            idInsAppris = new ArrayList<>();
+        }
+        for (int id : idInsMaitrises) {
             Instrument instrument = instrumentService.getInstrument(id);
             instrumentsMaitrises.add(instrument);
         }
         membre.setInstrumentsMaitrises(instrumentsMaitrises);
-        for (int id : idInstrumentsAppris) {
+        for (int id : idInsAppris) {
             Instrument instrument = instrumentService.getInstrument(id);
             instrumentsAppris.add(instrument);
         }
