@@ -7,9 +7,47 @@
 
 <body>
 <header th:replace="~{fragments/header :: header}"></header>
+
 <main class="container">
-  <h1 th:text="#{titre.prochainesRepresentations}">Titre</h1>
+  <!-- Titre principal -->
+  <h1>Prochaines représentations</h1>
+  <!-- Message d'alerte -->
+  <div class="alert alert-success" role="alert" th:text="${statut}" th:hidden="${statut == null}"></div>
+  <!-- Bouton pour ajouter une représentation -->
+  <div class="d-flex justify-content-center mb-3">
+    <a class="btn plain-primary" th:href="@{/creerRepresentation}">Ajouter Une Représentation</a>
+  </div>
+  <!-- Message si aucune représentation -->
+  <div th:if="${aucuneRepresentation} != null" th:text="${aucuneRepresentation}"></div>
+  <!-- Prochaines représentations -->
+  <article class="row row-card">
+    <section th:each="representation : ${prochainesRepresentations}" class="col col-card">
+      <div class="card">
+        <img th:src="@{/img/music.svg}" alt="Music" id="music-note" class="card-img-top">
+        <div class="card-body">
+          <h2 th:text="${representation.nomRepresentation}">Nom</h2>
+          <h3 th:text="'Date: ' + ${#temporals.format(representation.dateRepresentation, 'dd/MM/yyyy - HH:mm')}">Date</h3>
+          <h3 th:text="'Lieu: ' + ${representation.lieuRepresentation}">Lieu</h3>
+          <h3 th:text="'Participants: ' + ${representation.participants.size()}">Participants</h3>
+          <ul>
+            <th:block th:each="participant : ${representation.participants}">
+              <li th:text="${participant.prenomMembre} + ' ' + ${participant.nomMembre}">Participant</li>
+            </th:block>
+          </ul>
+          <h3 th:text="'Instruments joués: ' + ${representation.instruments.size()}">Instruments</h3>
+          <ul>
+            <th:block th:each="ins : ${representation.instruments}">
+              <li th:text="${ins.libelleInstrument}">Instrument</li>
+            </th:block>
+          </ul>
+          <a class="btn primary" th:href="${'/modifierRepresentation/'} + ${representation.idRepresentation}">Modifier</a>
+          <a class="btn danger" th:href="${'/supprimerRepresentation/'} + ${representation.idRepresentation}">Supprimer</a>
+        </div>
+      </div>
+    </section>
+  </article>
 </main>
+
 <footer th:replace="~{fragments/footer :: footer}"></footer>
 <script th:replace="~{fragments/script-bootstrap :: script-bootstrap}"></script>
 </body>
