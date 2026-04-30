@@ -7,11 +7,65 @@
 
 <body>
 <header th:replace="~{fragments/header :: header}"></header>
+
 <main class="container">
-  <h1 th:text="#{titre.representations}">Titre</h1>
+  <!-- Titre -->
+  <h1 th:text="${titreFormulaire}">Enregistrer</h1>
+  <!-- Formulaire -->
+  <form action="#" th:action="${action}" th:object="${representation}" id="form-cours" method="post">
+    <!-- Message d'alerte -->
+    <div class="alert alert-danger" role="alert" th:text="${alert}" th:hidden="${alert == null}"></div>
+    <!-- Nom de la représentation -->
+    <div class="mb-3">
+      <label class="form-label" for="nom-representation">Nom</label>
+      <input class="form-control" id="nom-representation" th:field="*{nomRepresentation}"
+             type="text" th:disabled="${nomSubmit == 'Supprimer'}" required>
+      <div class="message-erreur" th:text="${nomRepresentationErr}"></div>
+    </div>
+    <!-- Date de la representation -->
+    <div class="mb-3">
+      <label class="form-label" for="date-representation">Date et heure</label>
+      <input class="form-control" id="date-representation" th:field="*{dateRepresentation}"
+             type="datetime-local" th:disabled="${nomSubmit == 'Supprimer'}" required>
+      <div class="message-erreur" th:text="${dateRepresentationErr}"></div>
+    </div>
+    <!-- Participants -->
+    <div class="mb-3">
+      <label class="form-label" for="participants">Participants</label>
+      <select class="form-select" id="participants" name="idParticipants"
+              data-placeholder="--Choisir--" multiple th:disabled="${nomSubmit == 'Supprimer'}" required>
+        <option th:each="membre : ${membres}" th:value="${membre.idMembre}"
+                th:text="${membre.prenomMembre} + ' ' + ${membre.nomMembre}"
+                th:selected="${#lists.contains(idParticipants, membre.idMembre)}">
+      </select>
+      <div class="message-erreur" th:text="${participantsErr}"></div>
+    </div>
+    <!-- Instruments -->
+    <div class="mb-3">
+      <label class="form-label" for="instruments">Instruments</label>
+      <select class="form-select" id="instruments" name="idInstruments"
+              data-placeholder="--Choisir--" multiple th:disabled="${nomSubmit == 'Supprimer'}" required>
+        <option th:each="ins : ${instruments}" th:value="${ins.idInstrument}"
+                th:text="${ins.libelleInstrument}"
+                th:selected="${#lists.contains(idInstruments, ins.idInstrument)}">
+      </select>
+      <div class="message-erreur" th:text="${instrumentsErr}"></div>
+    </div>
+    <!-- Id caché -->
+    <input type="hidden" th:field="*{idRepresentation}">
+    <!-- Btn submit -->
+    <div>
+      <button class="btn btn-submit" type="submit" th:text="${nomSubmit}">Enregistrer</button>
+    </div>
+  </form>
 </main>
+
 <footer th:replace="~{fragments/footer :: footer}"></footer>
+
 <script th:replace="~{fragments/script-bootstrap :: script-bootstrap}"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.0/dist/jquery.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="/js/formRepresentation.js"></script>
 </body>
 
 </html>
