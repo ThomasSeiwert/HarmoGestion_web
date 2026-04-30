@@ -114,8 +114,8 @@ public class ControllerRepresentation {
      */
     @PostMapping("/creerRepresentation")
     public ModelAndView creerRepresentationPost(
-            @RequestParam(value = "idParticipants", required = false) List<Integer> idParticipants,
-            @RequestParam(value = "idInstruments", required = false) List<Integer> idInstruments,
+            @RequestParam("idParticipants") List<Integer> idParticipants,
+            @RequestParam("idInstruments") List<Integer> idInstruments,
             @ModelAttribute final RepresentationDto representationDto,
             ModelMap model) {
 
@@ -172,8 +172,8 @@ public class ControllerRepresentation {
     @PostMapping("/modifierRepresentation/{id}")
     public ModelAndView modifierRepresentationPost(
             @PathVariable final int id,
-            @RequestParam(value = "idParticipants", required = false) List<Integer> idParticipants,
-            @RequestParam(value = "idInstruments", required = false) List<Integer> idInstruments,
+            @RequestParam("idParticipants") List<Integer> idParticipants,
+            @RequestParam("idInstruments") List<Integer> idInstruments,
             @ModelAttribute final RepresentationDto representationDto,
             ModelMap model) {
 
@@ -294,12 +294,6 @@ public class ControllerRepresentation {
         Representation representation = Representation.clone(representationDto);
         ArrayList<Membre> participants = new ArrayList<>();
         ArrayList<Instrument> instruments = new ArrayList<>();
-        if (idParticipants == null) {
-            idParticipants = new ArrayList<>();
-        }
-        if (idInstruments == null) {
-            idInstruments = new ArrayList<>();
-        }
         for (int id : idParticipants) {
             Membre membre = membreService.getMembre(id);
             participants.add(membre);
