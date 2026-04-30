@@ -35,7 +35,7 @@
       <th class="ps-2" scope="row" th:text="${iStat.index+1}"></th>
       <td th:text="${membre.nomMembre}"></td>
       <td th:text="${membre.prenomMembre}"></td>
-      <td th:date="${membre.dateInscriptionMembre}"></td>
+      <td th:text="${#temporals.format(membre.dateInscriptionMembre, 'dd/MM/yyyy')}"></td>
       <td class="d-flex flex-column flex-lg-row gap-4 gap-lg-3 my-4 my-lg-0">
         <a th:href="${'/modifierMembre/'}+${membre.idMembre}"
            class="btn primary">Modifier</a>
